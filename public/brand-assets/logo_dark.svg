@@ -1,0 +1,5 @@
+<svg width="2559" height="581" viewBox="0 0 2559 581" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M256 546C397.385 546 512 431.385 512 290C512 148.615 397.385 34 256 34C114.615 34 0 148.615 0 290C0 431.385 114.615 546 256 546Z" fill="#F97316"/>
+<path d="M367 410H247.99C182.388 410 129 356.608 129 290.989C129 225.392 182.388 172 247.992 172C313.612 172 367 225.392 367 290.989V410Z" fill="white" stroke="white" stroke-width="6"/>
+<text x="600" y="410" font-family="Arial, Helvetica, sans-serif" font-size="320" font-weight="700" fill="white">Intelychat</text>
+</svg>
