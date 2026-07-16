@@ -1,5 +1,5 @@
 class CreatePlansAndAccountSubscriptions < ActiveRecord::Migration[7.1]
-  def change
+  def change # rubocop:disable Metrics/MethodLength
     create_table :plans do |t|
       t.string :name, null: false
       t.string :slug, null: false

@@ -27,7 +27,7 @@ class Billing::StripeEventJob < ApplicationJob
 
   def handle_subscription_updated(stripe_subscription)
     subscription = AccountSubscription.find_by(stripe_subscription_id: stripe_subscription[:id]) ||
-                    AccountSubscription.find_by(stripe_customer_id: stripe_subscription[:customer])
+                   AccountSubscription.find_by(stripe_customer_id: stripe_subscription[:customer])
     return if subscription.blank?
 
     plan = Plan.find_by(stripe_price_id: stripe_subscription.dig(:items, :data, 0, :price, :id))
