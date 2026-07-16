@@ -1,0 +1,5 @@
+# Optional: use with docker compose profile `with-caddy`
+# Replace YOUR_DOMAIN with chat.example.com and set FRONTEND_URL=https://YOUR_DOMAIN
+YOUR_DOMAIN {
+  reverse_proxy rails:3000
+}

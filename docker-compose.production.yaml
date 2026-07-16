@@ -1,9 +1,16 @@
-version: '3'
+# Production stack — builds YOUR Intelyhood/Intelychat code (not upstream Chatwoot image).
+# Usage:
+#   cp .env.example .env   # then edit FRONTEND_URL, secrets, DB/Redis passwords
+#   docker compose -f docker-compose.production.yaml up -d --build
+version: '3.8'
 
 services:
   base: &base
-    image: chatwoot/chatwoot:latest
-    env_file: .env ## Change this file for customized env variables
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: intelyhood_chat:production
+    env_file: .env
     volumes:
       - storage_data:/app/storage
 
@@ -42,22 +49,43 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=intelychat
-      - POSTGRES_USER=postgres
-      # Please provide your own password.
-      - POSTGRES_PASSWORD=
+      POSTGRES_DB: ${POSTGRES_DATABASE:-intelychat}
+      POSTGRES_USER: ${POSTGRES_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   redis:
     image: redis:alpine
     restart: always
-    command: ["sh", "-c", "redis-server --requirepass \"$REDIS_PASSWORD\""]
+    command: ["sh", "-c", "redis-server --requirepass \"$$REDIS_PASSWORD\""]
     env_file: .env
     volumes:
       - redis_data:/data
     ports:
       - '127.0.0.1:6379:6379'
 
+  # Optional reverse proxy when you do not use host nginx yet
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    profiles: ['with-caddy']
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./deployment/vps/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - rails
+
 volumes:
   storage_data:
   postgres_data:
   redis_data:
+  caddy_data:
+  caddy_config:
