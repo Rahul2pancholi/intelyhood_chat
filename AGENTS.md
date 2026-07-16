@@ -60,6 +60,22 @@
 - Prefer `with_modified_env` (from spec helpers) over stubbing `ENV` directly in specs
 - Specs in parallel/reloading environments: prefer comparing `error.class.name` over constant class equality when asserting raised errors
 
+### Minimalism Decision Ladder (before writing any code)
+
+Work through this order before implementing anything new — stop at the first step that resolves the need:
+
+1. **Does this need to exist?** Skip it if not (YAGNI).
+2. **Already in this codebase?** Reuse it rather than rewriting.
+3. **Does the standard library do it?** Use the stdlib (Ruby stdlib / JS built-ins).
+4. **Native platform/framework feature?** Use Rails/Vue built-ins over custom code.
+5. **Installed dependency?** Leverage an existing gem/npm package already in this repo.
+6. **Can it be one line?** Write it as one line.
+7. **Only then**: build the minimal implementation that works.
+
+Be lazy about the solution, never about reading — trace the actual code path before writing anything.
+
+**Non-negotiable, never cut for minimalism**: trust-boundary validation, data-loss handling, security measures, accessibility requirements.
+
 ## Codex Worktree Workflow
 
 - Use a separate git worktree + branch per task to keep changes isolated.
