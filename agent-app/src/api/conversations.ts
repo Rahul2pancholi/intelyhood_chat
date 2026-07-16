@@ -19,6 +19,7 @@ export type Conversation = {
   priority: ConversationPriority;
   unread_count: number;
   labels: string[];
+  muted: boolean;
   last_activity_at: number;
   snoozed_until: number | null;
   additional_attributes: Record<string, unknown>;
@@ -47,10 +48,13 @@ export type ConversationsMeta = {
   all_count: number;
 };
 
+export type ConversationType = 'mention' | 'participating' | 'unattended';
+
 export type FetchConversationsParams = {
   accountId: number;
   status?: ConversationStatus | 'all';
   assigneeType?: AssigneeType;
+  conversationType?: ConversationType;
   inboxId?: number;
   page?: number;
 };
@@ -59,11 +63,16 @@ export async function fetchConversations({
   accountId,
   status = 'open',
   assigneeType,
+  conversationType,
   inboxId,
   page = 1,
 }: FetchConversationsParams): Promise<{ meta: ConversationsMeta; payload: Conversation[] }> {
   const response = await apiClient.get(`/api/v1/accounts/${accountId}/conversations`, {
-    params: { status, assignee_type: assigneeType, inbox_id: inboxId, page },
+    // conversation_type (mention/participating/unattended) takes precedence over
+    // assignee_type in ConversationFinder — only send one or the other.
+    params: conversationType
+      ? { status, conversation_type: conversationType, inbox_id: inboxId, page }
+      : { status, assignee_type: assigneeType, inbox_id: inboxId, page },
   });
   return response.data.data;
 }
@@ -173,4 +182,12 @@ export async function toggleTypingStatus(
     `/api/v1/accounts/${accountId}/conversations/${conversationId}/toggle_typing_status`,
     { typing_status: status, is_private: isPrivate },
   );
+}
+
+export async function muteConversation(accountId: number, conversationId: number): Promise<void> {
+  await apiClient.post(`/api/v1/accounts/${accountId}/conversations/${conversationId}/mute`);
+}
+
+export async function unmuteConversation(accountId: number, conversationId: number): Promise<void> {
+  await apiClient.post(`/api/v1/accounts/${accountId}/conversations/${conversationId}/unmute`);
 }

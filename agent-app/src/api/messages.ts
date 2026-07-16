@@ -3,6 +3,12 @@ import type { ConversationSender } from './conversations';
 
 export const MessageType = { incoming: 0, outgoing: 1, activity: 2, template: 3 } as const;
 
+export type MessageAttachment = {
+  id: number;
+  file_type: string;
+  data_url: string;
+};
+
 export type Message = {
   id: number;
   content: string | null;
@@ -13,7 +19,7 @@ export type Message = {
   conversation_id: number;
   content_attributes?: { in_reply_to?: number };
   sender?: ConversationSender & { type?: string };
-  attachments?: Array<{ id: number; file_type: string; data_url: string }>;
+  attachments?: MessageAttachment[];
 };
 
 export async function fetchMessages(

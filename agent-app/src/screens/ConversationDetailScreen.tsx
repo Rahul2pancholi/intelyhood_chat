@@ -40,9 +40,11 @@ import {
   fetchAssignableAgents,
   fetchConversation,
   fetchConversationParticipants,
+  muteConversation,
   toggleConversationPriority,
   toggleConversationStatus,
   toggleTypingStatus,
+  unmuteConversation,
   updateConversationLabels,
   updateConversationParticipants,
   type Agent,
@@ -61,6 +63,8 @@ import {
 import OptionSheet, { type SheetOption } from '../components/OptionSheet';
 import AssignmentSheet from '../components/AssignmentSheet';
 import MultiSelectSheet from '../components/MultiSelectSheet';
+import AttachmentView from '../components/AttachmentView';
+import ImageViewerModal from '../components/ImageViewerModal';
 import { onRoomEvent } from '../realtime/cable';
 import { useTheme } from '../theme/useTheme';
 import type { ThemeColors } from '../theme/colors';
@@ -120,10 +124,11 @@ export default function ConversationDetailScreen() {
   const [ccEmails, setCcEmails] = useState('');
   const [bccEmails, setBccEmails] = useState('');
   const [toEmails, setToEmails] = useState('');
+  const [viewingImageUri, setViewingImageUri] = useState<string | null>(null);
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(audioRecorder);
   const isEmailConversation = conversation?.meta.channel === 'Channel::Email';
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList<Message>>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTypingRef = useRef(false);
 
@@ -231,6 +236,12 @@ export default function ConversationDetailScreen() {
       setVoiceAttachment(null);
       setReplyingTo(null);
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
+    } catch {
+      // Draft/attachments are deliberately kept so Retry re-sends the same content.
+      Alert.alert('Message not sent', 'Check your connection and try again.', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Retry', onPress: () => handleSend() },
+      ]);
     } finally {
       setSending(false);
     }
@@ -290,6 +301,16 @@ export default function ConversationDetailScreen() {
     if (!accountId) return;
     await toggleConversationPriority(accountId, conversationId, priority);
     setConversation(prev => (prev ? { ...prev, priority } : prev));
+  };
+
+  const handleToggleMute = async () => {
+    if (!accountId || !conversation) return;
+    if (conversation.muted) {
+      await unmuteConversation(accountId, conversationId);
+    } else {
+      await muteConversation(accountId, conversationId);
+    }
+    setConversation(prev => (prev ? { ...prev, muted: !prev.muted } : prev));
   };
 
   const openAssignmentSheet = async () => {
@@ -422,6 +443,9 @@ export default function ConversationDetailScreen() {
         <Pressable style={styles.actionButton} onPress={openParticipantSheet}>
           <Text style={styles.actionButtonText}>Participants</Text>
         </Pressable>
+        <Pressable style={styles.actionButton} onPress={handleToggleMute}>
+          <Text style={styles.actionButtonText}>{conversation?.muted ? 'Unmute' : 'Mute'}</Text>
+        </Pressable>
       </ScrollView>
 
       <FlatList
@@ -462,9 +486,19 @@ export default function ConversationDetailScreen() {
                     </Text>
                   </View>
                 )}
-                <Text style={isOutgoing ? styles.bubbleTextLight : styles.bubbleTextDark}>
-                  {formatMentionsForDisplay(item.content)}
-                </Text>
+                {item.attachments?.map(attachment => (
+                  <AttachmentView
+                    key={attachment.id}
+                    attachment={attachment}
+                    tint={isOutgoing ? 'light' : 'dark'}
+                    onPressImage={setViewingImageUri}
+                  />
+                ))}
+                {!!item.content && (
+                  <Text style={isOutgoing ? styles.bubbleTextLight : styles.bubbleTextDark}>
+                    {formatMentionsForDisplay(item.content)}
+                  </Text>
+                )}
               </View>
             </Pressable>
           );
@@ -686,10 +720,16 @@ export default function ConversationDetailScreen() {
           { label: 'Summarize conversation', value: 'summarize' as const },
           { label: 'Fix spelling & grammar', value: 'fix_spelling_grammar' as const },
           { label: 'Improve writing', value: 'improve' as const },
+          { label: 'Rewrite: Casual tone', value: 'casual' as const },
+          { label: 'Rewrite: Professional tone', value: 'professional' as const },
+          { label: 'Rewrite: Friendly tone', value: 'friendly' as const },
+          { label: 'Rewrite: Confident tone', value: 'confident' as const },
+          { label: 'Rewrite: Straightforward tone', value: 'straightforward' as const },
         ]}
         onSelect={handleCopilotAction}
         onClose={() => setCopilotSheetVisible(false)}
       />
+      <ImageViewerModal uri={viewingImageUri} onClose={() => setViewingImageUri(null)} />
     </KeyboardAvoidingView>
   );
 }

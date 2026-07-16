@@ -41,6 +41,29 @@ export async function searchContacts(
   return response.data;
 }
 
+export type ContactInput = {
+  name: string;
+  email?: string;
+  phone_number?: string;
+};
+
+export async function createContact(accountId: number, input: ContactInput): Promise<Contact> {
+  const response = await apiClient.post(`/api/v1/accounts/${accountId}/contacts`, input);
+  return response.data.payload.contact;
+}
+
+export async function updateContact(
+  accountId: number,
+  contactId: number,
+  input: ContactInput,
+): Promise<Contact> {
+  const response = await apiClient.patch(
+    `/api/v1/accounts/${accountId}/contacts/${contactId}`,
+    input,
+  );
+  return response.data.payload;
+}
+
 export async function fetchContactConversations(
   accountId: number,
   contactId: number,

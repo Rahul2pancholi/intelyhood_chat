@@ -11,12 +11,16 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Swipeable } from 'react-native-gesture-handler';
 import { useAuthStore } from '../store/authStore';
 import {
+  assignConversationToUser,
   fetchConversations,
+  toggleConversationStatus,
   type AssigneeType,
   type Conversation,
   type ConversationStatus,
+  type ConversationType,
 } from '../api/conversations';
 import { fetchInboxes, type Inbox } from '../api/inboxes';
 import { formatMentionsForDisplay } from '../utils/mentions';
@@ -41,6 +45,12 @@ const ASSIGNEE_TABS: { label: string; value: AssigneeType }[] = [
   { label: 'All', value: 'assigned' },
 ];
 
+const SPECIAL_TABS: { label: string; value: ConversationType }[] = [
+  { label: 'Mentions', value: 'mention' },
+  { label: 'Participating', value: 'participating' },
+  { label: 'Unattended', value: 'unattended' },
+];
+
 const STATUS_FILTERS: { label: string; value: ConversationStatus }[] = [
   { label: 'Open', value: 'open' },
   { label: 'Pending', value: 'pending' },
@@ -54,7 +64,9 @@ export default function ConversationsListScreen() {
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const accountId = useAuthStore(state => state.activeAccountId);
+  const currentUserId = useAuthStore(state => state.user?.id);
   const [assigneeType, setAssigneeType] = useState<AssigneeType>('me');
+  const [conversationType, setConversationType] = useState<ConversationType | null>(null);
   const [status, setStatus] = useState<ConversationStatus>('open');
   const [inboxes, setInboxes] = useState<Inbox[]>([]);
   const [inboxId, setInboxId] = useState<number | undefined>(undefined);
@@ -74,6 +86,7 @@ export default function ConversationsListScreen() {
           accountId,
           status,
           assigneeType,
+          conversationType: conversationType ?? undefined,
           inboxId,
           page: targetPage,
         });
@@ -85,7 +98,7 @@ export default function ConversationsListScreen() {
         setRefreshing(false);
       }
     },
-    [accountId, status, assigneeType, inboxId],
+    [accountId, status, assigneeType, conversationType, inboxId],
   );
 
   useEffect(() => {
@@ -110,16 +123,39 @@ export default function ConversationsListScreen() {
     [load],
   );
 
+  const handleSwipeResolve = async (conversation: Conversation) => {
+    if (!accountId) return;
+    await toggleConversationStatus(accountId, conversation.id, 'resolved');
+    load(1, true);
+  };
+
+  const handleSwipeAssignToMe = async (conversation: Conversation) => {
+    if (!accountId || !currentUserId) return;
+    await assignConversationToUser(accountId, conversation.id, currentUserId);
+    load(1, true);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.tabRow}>
         {ASSIGNEE_TABS.map(tab => (
           <Pressable
             key={tab.value}
-            style={[styles.tab, assigneeType === tab.value && styles.tabActive]}
-            onPress={() => setAssigneeType(tab.value)}
+            style={[
+              styles.tab,
+              !conversationType && assigneeType === tab.value && styles.tabActive,
+            ]}
+            onPress={() => {
+              setConversationType(null);
+              setAssigneeType(tab.value);
+            }}
           >
-            <Text style={[styles.tabText, assigneeType === tab.value && styles.tabTextActive]}>
+            <Text
+              style={[
+                styles.tabText,
+                !conversationType && assigneeType === tab.value && styles.tabTextActive,
+              ]}
+            >
               {tab.label}
             </Text>
           </Pressable>
@@ -127,6 +163,22 @@ export default function ConversationsListScreen() {
       </View>
 
       <ScrollView horizontal style={styles.filterRow} showsHorizontalScrollIndicator={false}>
+        {SPECIAL_TABS.map(tab => (
+          <Pressable
+            key={tab.value}
+            style={[styles.filterChip, conversationType === tab.value && styles.filterChipActive]}
+            onPress={() => setConversationType(prev => (prev === tab.value ? null : tab.value))}
+          >
+            <Text
+              style={[
+                styles.filterChipText,
+                conversationType === tab.value && styles.filterChipTextActive,
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </Pressable>
+        ))}
         {STATUS_FILTERS.map(filter => (
           <Pressable
             key={filter.value}
@@ -173,28 +225,47 @@ export default function ConversationsListScreen() {
         }
         ListFooterComponent={loading ? <ActivityIndicator style={{ margin: 16 }} /> : null}
         renderItem={({ item }) => (
-          <Pressable
-            style={styles.row}
-            onPress={() =>
-              navigation.navigate('ConversationDetail', { conversationId: item.id })
-            }
+          <Swipeable
+            renderLeftActions={() => (
+              <Pressable
+                style={styles.swipeActionAssign}
+                onPress={() => handleSwipeAssignToMe(item)}
+              >
+                <Text style={styles.swipeActionText}>Assign to me</Text>
+              </Pressable>
+            )}
+            renderRightActions={() => (
+              <Pressable
+                style={styles.swipeActionResolve}
+                onPress={() => handleSwipeResolve(item)}
+              >
+                <Text style={styles.swipeActionText}>Resolve</Text>
+              </Pressable>
+            )}
           >
-            <View style={styles.rowHeader}>
-              <Text style={styles.rowName} numberOfLines={1}>
-                {item.meta.sender?.name ?? 'Unknown contact'}
+            <Pressable
+              style={styles.row}
+              onPress={() =>
+                navigation.navigate('ConversationDetail', { conversationId: item.id })
+              }
+            >
+              <View style={styles.rowHeader}>
+                <Text style={styles.rowName} numberOfLines={1}>
+                  {item.meta.sender?.name ?? 'Unknown contact'}
+                </Text>
+                {item.unread_count > 0 && (
+                  <View style={styles.unreadBadge}>
+                    <Text style={styles.unreadBadgeText}>{item.unread_count}</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={styles.rowSnippet} numberOfLines={1}>
+                {item.last_non_activity_message?.content
+                  ? formatMentionsForDisplay(item.last_non_activity_message.content)
+                  : 'No messages yet'}
               </Text>
-              {item.unread_count > 0 && (
-                <View style={styles.unreadBadge}>
-                  <Text style={styles.unreadBadgeText}>{item.unread_count}</Text>
-                </View>
-              )}
-            </View>
-            <Text style={styles.rowSnippet} numberOfLines={1}>
-              {item.last_non_activity_message?.content
-                ? formatMentionsForDisplay(item.last_non_activity_message.content)
-                : 'No messages yet'}
-            </Text>
-          </Pressable>
+            </Pressable>
+          </Swipeable>
         )}
       />
 
@@ -255,6 +326,17 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: 4,
     },
     unreadBadgeText: { color: colors.accentText, fontSize: 11, fontWeight: '700' },
+    swipeActionAssign: {
+      backgroundColor: colors.accent,
+      justifyContent: 'center',
+      paddingHorizontal: 20,
+    },
+    swipeActionResolve: {
+      backgroundColor: colors.success,
+      justifyContent: 'center',
+      paddingHorizontal: 20,
+    },
+    swipeActionText: { color: colors.accentText, fontWeight: '600' },
     empty: { padding: 40, alignItems: 'center' },
     emptyText: { color: colors.textMuted },
   });

@@ -11,6 +11,7 @@ export type ThemeColors = {
   danger: string;
   dangerBg: string;
   warningBg: string;
+  success: string;
   chipBg: string;
   chipText: string;
 };
@@ -28,6 +29,7 @@ export const lightColors: ThemeColors = {
   danger: '#dc2626',
   dangerBg: '#ef4444',
   warningBg: '#fef3c7',
+  success: '#16a34a',
   chipBg: '#f3f4f6',
   chipText: '#374151',
 };
@@ -45,6 +47,7 @@ export const darkColors: ThemeColors = {
   danger: '#f87171',
   dangerBg: '#dc2626',
   warningBg: '#453a15',
+  success: '#22c55e',
   chipBg: '#242833',
   chipText: '#d1d5db',
 };
