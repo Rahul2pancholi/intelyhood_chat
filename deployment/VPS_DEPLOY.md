@@ -1,22 +1,23 @@
-# VPS deploy (Contabo) — Intelyhood Chat
+# VPS deploy (eVPS) — Intelyhood Chat
 
-Easy path: **Docker on Ubuntu 24** + **GitHub Actions auto-deploy**.
+Easy path: **Docker on Ubuntu 24** + **GitHub Actions auto-deploy on `main`**.
 
-Current Contabo VPS (example):
+Current VPS:
 
 | Field | Value |
 |--------|--------|
 | IP | `91.92.136.196` |
 | User | `root` |
 | App dir | `/opt/intelyhood_chat` |
+| Deploy branch | `main` |
 
-> Panel root password expires ~72h. Prefer SSH key login (below).
+> Prefer SSH key login. Panel root passwords may rotate.
 
 ---
 
 ## 0) One-time: fix SSH from Mac / Cursor
 
-Contabo panel → **NoVNC Console** → login as `root`.
+Provider console / NoVNC → login as `root`.
 
 Paste (use your Mac public key):
 
@@ -105,7 +106,7 @@ bash /opt/intelyhood_chat/deployment/vps/deploy.sh
 ## 3) GitHub Actions auto-deploy
 
 Workflow: `.github/workflows/deploy_vps.yml`  
-Triggers on push to `main` / `master` / `intelychat-main` (and manual run).
+Triggers on push to `main` (and manual `workflow_dispatch`). No SSH password / interactive step — uses `VPS_SSH_PRIVATE_KEY`.
 
 ### Create a deploy key (on your Mac)
 
@@ -157,7 +158,7 @@ bash deployment/vps/deploy.sh
 
 | Problem | Fix |
 |---------|-----|
-| `Connection refused` port 22 | NoVNC → `systemctl start ssh` / check Contabo Firewall |
+| `Connection refused` port 22 | NoVNC → `systemctl start ssh` / check provider firewall |
 | Host key changed | `ssh-keygen -R 91.92.136.196` then reconnect |
 | Wrong IP after upgrade | Update `HostName` in `~/.ssh/config` + GitHub `VPS_HOST` |
 | Deploy Action skipped | Set `VPS_HOST` secret (workflow checks it) |
