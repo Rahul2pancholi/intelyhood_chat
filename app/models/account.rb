@@ -111,6 +111,7 @@ class Account < ApplicationRecord
 
   before_validation :validate_limit_keys
   after_create_commit :notify_creation
+  after_create_commit :assign_default_subscription
   after_update_commit :clear_unread_conversation_counts_cache, if: :saved_change_to_feature_conversation_unread_counts?
   after_destroy :remove_account_sequences
 
@@ -150,8 +151,8 @@ class Account < ApplicationRecord
 
   def usage_limits
     {
-      agents: ChatwootApp.max_limit.to_i,
-      inboxes: ChatwootApp.max_limit.to_i
+      agents: IntelychatApp.max_limit.to_i,
+      inboxes: IntelychatApp.max_limit.to_i
     }
   end
 
@@ -180,6 +181,10 @@ class Account < ApplicationRecord
 
   def notify_creation
     Rails.configuration.dispatcher.dispatch(ACCOUNT_CREATED, Time.zone.now, account: self)
+  end
+
+  def assign_default_subscription
+    create_subscription!(plan: Plan.active.find_by(slug: 'free'), status: 'active')
   end
 
   def clear_unread_conversation_counts_cache

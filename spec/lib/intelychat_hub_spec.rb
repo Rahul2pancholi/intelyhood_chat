@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ChatwootHub do
+describe IntelychatHub do
   describe '.base_url' do
     it 'uses the static hub url' do
       expect(described_class::DEFAULT_BASE_URL).to eq('https://hub.2.chatwoot.com')
@@ -15,7 +15,7 @@ describe ChatwootHub do
   end
 
   context 'when fetching sync_with_hub' do
-    it 'get latest version from chatwoot hub' do
+    it 'get latest version from intelychat hub' do
       version = '1.1.1'
       allow(RestClient).to receive(:post).and_return({ version: version }.to_json)
       expect(described_class.sync_with_hub['version']).to eq version
@@ -33,7 +33,7 @@ describe ChatwootHub do
       end
     end
 
-    it 'returns nil when chatwoot hub is down' do
+    it 'returns nil when intelychat hub is down' do
       allow(RestClient).to receive(:post).and_raise(ExceptionList::REST_CLIENT_EXCEPTIONS.sample)
       expect(described_class.sync_with_hub).to be_nil
     end

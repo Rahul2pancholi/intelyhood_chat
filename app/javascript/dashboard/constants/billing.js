@@ -6,7 +6,7 @@
 export const DEFAULT_BILLING_CURRENCY = 'usd';
 
 // Order here drives the order of the currency toggle in the UI.
-export const SUPPORTED_BILLING_CURRENCIES = ['usd', 'brl'];
+export const SUPPORTED_BILLING_CURRENCIES = ['usd', 'brl', 'inr'];
 
 export const BILLING_CURRENCY_CONFIG = {
   usd: {
@@ -18,6 +18,11 @@ export const BILLING_CURRENCY_CONFIG = {
     code: 'brl',
     intlLocale: 'pt-BR',
     i18nLabelKey: 'BILLING_SETTINGS.CURRENCY.OPTIONS.BRL',
+  },
+  inr: {
+    code: 'inr',
+    intlLocale: 'en-IN',
+    i18nLabelKey: 'BILLING_SETTINGS.CURRENCY.OPTIONS.INR',
   },
 };
 

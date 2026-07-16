@@ -42,7 +42,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=chatwoot
+      - POSTGRES_DB=intelychat
       - POSTGRES_USER=postgres
       # Please provide your own password.
       - POSTGRES_PASSWORD=

@@ -13,7 +13,7 @@ import { META_RESTRICTION_STATUS_URL } from 'dashboard/constants/globals';
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const { isOnChatwootCloud } = useAccount();
+const { isOnIntelychatCloud } = useAccount();
 
 const PROVIDER_TYPES = {
   WHATSAPP: 'whatsapp',
@@ -25,13 +25,13 @@ const PROVIDER_TYPES = {
 };
 
 const isWhatsappEmbeddedSignupRestricted = computed(() => {
-  return isOnChatwootCloud.value;
+  return isOnIntelychatCloud.value;
 });
 
 const hasWhatsappAppId = computed(() => {
   return (
-    window.chatwootConfig?.whatsappAppId &&
-    window.chatwootConfig.whatsappAppId !== 'none'
+    window.intelychatConfig?.whatsappAppId &&
+    window.intelychatConfig.whatsappAppId !== 'none'
   );
 });
 

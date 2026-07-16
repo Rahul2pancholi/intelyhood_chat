@@ -6,6 +6,7 @@
 #  active                      :boolean          default(TRUE), not null
 #  billing_interval            :string           default("month"), not null
 #  currency                    :string           default("usd"), not null
+#  included_features           :jsonb            not null
 #  max_agents                  :integer
 #  max_conversations_per_month :integer
 #  max_inboxes                 :integer
@@ -15,7 +16,7 @@
 #  slug                        :string           not null
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
-#  stripe_price_id             :string
+#  razorpay_plan_id            :string
 #
 # Indexes
 #
@@ -35,5 +36,9 @@ class Plan < ApplicationRecord
 
   def price
     price_cents / 100.0
+  end
+
+  def includes_feature?(name)
+    included_features.include?(name.to_s)
   end
 end

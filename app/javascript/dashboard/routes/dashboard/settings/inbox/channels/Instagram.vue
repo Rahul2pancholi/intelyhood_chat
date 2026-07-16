@@ -9,14 +9,14 @@ import { useAccount } from 'dashboard/composables/useAccount';
 import { META_RESTRICTION_STATUS_URL } from 'dashboard/constants/globals';
 
 const { t } = useI18n();
-const { isOnChatwootCloud } = useAccount();
+const { isOnIntelychatCloud } = useAccount();
 
 const hasError = ref(false);
 const errorStateMessage = ref('');
 const errorStateDescription = ref('');
 const isRequestingAuthorization = ref(false);
 const isInstagramConnectionRestricted = computed(() => {
-  return isOnChatwootCloud.value;
+  return isOnIntelychatCloud.value;
 });
 
 onMounted(() => {

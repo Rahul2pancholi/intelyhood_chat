@@ -1,18 +1,18 @@
 class SuperAdmin::InstanceStatusesController < SuperAdmin::ApplicationController
   def show
     @metrics = {}
-    chatwoot_version
+    intelychat_version
     sha
     postgres_status
     redis_metrics
-    chatwoot_edition
+    intelychat_edition
     instance_meta
   end
 
-  def chatwoot_edition
-    @metrics['Chatwoot edition'] = if ChatwootApp.enterprise?
+  def intelychat_edition
+    @metrics['Intelychat edition'] = if IntelychatApp.enterprise?
                                      'Enterprise'
-                                   elsif ChatwootApp.custom?
+                                   elsif IntelychatApp.custom?
                                      'Custom'
                                    else
                                      'Community'
@@ -23,8 +23,8 @@ class SuperAdmin::InstanceStatusesController < SuperAdmin::ApplicationController
     @metrics['Database Migrations'] = ActiveRecord::Base.connection.migration_context.needs_migration? ? 'pending' : 'completed'
   end
 
-  def chatwoot_version
-    @metrics['Chatwoot version'] = Chatwoot.config[:version]
+  def intelychat_version
+    @metrics['Intelychat version'] = Intelychat.config[:version]
   end
 
   def sha

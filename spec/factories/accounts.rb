@@ -6,5 +6,10 @@ FactoryBot.define do
     status { 'active' }
     domain { 'test.com' }
     support_email { 'support@test.com' }
+
+    after(:create) do |account|
+      enterprise_plan = Plan.find_by(slug: 'enterprise')
+      account.subscription&.update!(plan: enterprise_plan) if enterprise_plan
+    end
   end
 end

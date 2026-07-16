@@ -25,7 +25,7 @@ describe Webhooks::InstagramEventsJob do
 
   describe '#perform' do
     context 'when handling messaging events for Instagram via Facebook page' do
-      let!(:instagram_messenger_channel) { create(:channel_instagram_fb_page, account: account, instagram_id: 'chatwoot-app-user-id-1') }
+      let!(:instagram_messenger_channel) { create(:channel_instagram_fb_page, account: account, instagram_id: 'intelychat-app-user-id-1') }
       let!(:instagram_messenger_inbox) { create(:inbox, channel: instagram_messenger_channel, account: account, greeting_enabled: false) }
       let(:fb_object) { double }
 
@@ -221,7 +221,7 @@ describe Webhooks::InstagramEventsJob do
     end
 
     context 'when handling messaging events for Instagram via Instagram login' do
-      let!(:instagram_channel) { create(:channel_instagram, account: account, instagram_id: 'chatwoot-app-user-id-1') }
+      let!(:instagram_channel) { create(:channel_instagram, account: account, instagram_id: 'intelychat-app-user-id-1') }
       let!(:instagram_inbox) { instagram_channel.inbox }
 
       before do

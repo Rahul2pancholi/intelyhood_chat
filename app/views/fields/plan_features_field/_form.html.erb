@@ -1,0 +1,14 @@
+<div class="field-unit__label">
+  <%= f.label field.attribute %>
+</div>
+<div class="plan-features-field">
+  <%= hidden_field_tag "#{f.object_name}[included_features][]", '' %>
+  <% field.selectable_features.each do |feature_name| %>
+    <label style="display: block;">
+      <%= check_box_tag "#{f.object_name}[included_features][]", feature_name,
+                        Array(field.data).include?(feature_name),
+                        multiple: true, id: nil %>
+      <%= field.display_name_for(feature_name) %>
+    </label>
+  <% end %>
+</div>

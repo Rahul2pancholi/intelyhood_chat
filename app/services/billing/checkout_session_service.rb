@@ -1,32 +1,29 @@
 class Billing::CheckoutSessionService
   pattr_initialize [:account, :plan]
 
+  # Razorpay subscriptions have no fixed end date by default; total_count is
+  # required by the API, so we request a long-running billing cycle count and
+  # rely on cancellation (see Billing::PortalSessionService) rather than expiry.
+  TOTAL_BILLING_CYCLES = 120
+
   def perform
-    Stripe::Checkout::Session.create(
+    razorpay_subscription = Razorpay::Subscription.create(
       {
-        customer: stripe_customer_id,
-        customer_email: stripe_customer_id ? nil : account.administrators.first&.email,
-        mode: 'subscription',
-        line_items: [{ price: plan.stripe_price_id, quantity: 1 }],
-        success_url: "#{frontend_url}/app/accounts/#{account.id}/settings/billing?checkout=success",
-        cancel_url: "#{frontend_url}/app/accounts/#{account.id}/settings/billing?checkout=cancelled",
-        client_reference_id: account.id,
-        metadata: { account_id: account.id }
+        plan_id: plan.razorpay_plan_id,
+        customer_notify: 1,
+        total_count: TOTAL_BILLING_CYCLES,
+        notes: { account_id: account.id }
       }.compact
     )
+
+    subscription.update!(plan: plan, razorpay_subscription_id: razorpay_subscription.id,
+                          razorpay_short_url: razorpay_subscription.short_url)
+    razorpay_subscription
   end
 
   private
 
   def subscription
     @subscription ||= account.subscription || account.create_subscription!(plan: plan)
-  end
-
-  def stripe_customer_id
-    subscription.stripe_customer_id
-  end
-
-  def frontend_url
-    ENV.fetch('FRONTEND_URL', nil)
   end
 end

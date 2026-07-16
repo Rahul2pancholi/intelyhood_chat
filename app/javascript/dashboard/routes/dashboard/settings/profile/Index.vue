@@ -103,7 +103,7 @@ export default {
       globalConfig: 'globalConfig/get',
     }),
     isMfaEnabled() {
-      return parseBoolean(window.chatwootConfig?.isMfaEnabled);
+      return parseBoolean(window.intelychatConfig?.isMfaEnabled);
     },
   },
   mounted() {

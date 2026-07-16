@@ -92,16 +92,16 @@ export default {
   computed: {
     ...mapGetters({ globalConfig: 'globalConfig/get' }),
     allowedLoginMethods() {
-      return window.chatwootConfig.allowedLoginMethods || ['email'];
+      return window.intelychatConfig.allowedLoginMethods || ['email'];
     },
     showGoogleOAuth() {
       return (
         this.allowedLoginMethods.includes('google_oauth') &&
-        Boolean(window.chatwootConfig.googleOAuthClientId)
+        Boolean(window.intelychatConfig.googleOAuthClientId)
       );
     },
     showSignupLink() {
-      return window.chatwootConfig.signupEnabled === 'true';
+      return window.intelychatConfig.signupEnabled === 'true';
     },
     showSamlLogin() {
       return this.allowedLoginMethods.includes('saml');

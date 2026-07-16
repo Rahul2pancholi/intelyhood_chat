@@ -32,10 +32,10 @@ class Twilio::TemplateProcessorService
     end
   end
 
-  def convert_text_template(chatwoot_params)
-    return process_key_value_params(chatwoot_params['processed_params']) if chatwoot_params['processed_params'].present?
+  def convert_text_template(intelychat_params)
+    return process_key_value_params(intelychat_params['processed_params']) if intelychat_params['processed_params'].present?
 
-    process_whatsapp_format_params(chatwoot_params['parameters'])
+    process_whatsapp_format_params(intelychat_params['parameters'])
   end
 
   def process_key_value_params(processed_params)
@@ -62,18 +62,18 @@ class Twilio::TemplateProcessorService
     content_variables
   end
 
-  def convert_media_template(chatwoot_params)
+  def convert_media_template(intelychat_params)
     content_variables = {}
 
     # Handle processed_params format (key-value pairs)
-    if chatwoot_params['processed_params'].present?
-      chatwoot_params['processed_params'].each do |key, value|
+    if intelychat_params['processed_params'].present?
+      intelychat_params['processed_params'].each do |key, value|
         content_variables[key.to_s] = value.to_s
       end
     else
       # Handle parameters format (WhatsApp Cloud API format)
       parameter_index = 1
-      chatwoot_params['parameters']&.each do |component|
+      intelychat_params['parameters']&.each do |component|
         parameter_index = process_component(component, content_variables, parameter_index)
       end
     end

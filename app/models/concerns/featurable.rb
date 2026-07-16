@@ -11,6 +11,11 @@ module Featurable
   }.freeze
 
   FEATURE_LIST = YAML.safe_load(Rails.root.join('config/features.yml').read).freeze
+  # `intelychat_internal` premium features (e.g. search indexing pipelines) are
+  # internal infra toggles, not customer-purchasable features, so they're
+  # exempt from the plan-gating check in #feature_enabled? below.
+  PREMIUM_FEATURE_NAMES = FEATURE_LIST.select { |feature| feature['premium'] && !feature['intelychat_internal'] }
+                                      .pluck('name').to_set.freeze
 
   def self.feature_flag_mappings_for(feature_list)
     features_by_column = feature_list.group_by { |feature| feature['column'].presence || DEFAULT_FEATURE_FLAG_COLUMN }
@@ -92,13 +97,25 @@ module Featurable
     save
   end
 
+  # Premium features (config/features.yml `premium: true`) additionally require
+  # the account to be on a plan that grants them, via an active/trialing
+  # subscription — the per-account bitset flag alone is not sufficient. This
+  # closes the gap where premium features were enabled by default for every
+  # account regardless of payment status. Super Admins can still flip the
+  # bitset off to force-disable a premium feature the plan would otherwise
+  # grant, but cannot use it to grant a feature the plan doesn't include.
   def feature_enabled?(name)
-    send("feature_#{name}?")
+    flag_enabled = send("feature_#{name}?")
+    return flag_enabled unless flag_enabled && PREMIUM_FEATURE_NAMES.include?(name.to_s)
+
+    premium_feature_permitted?(name)
   end
 
+  # Reflects the raw per-account bitset (what Super Admin actually set), not the
+  # plan-gated effective value — see feature_enabled? for the runtime check.
   def all_features
     FEATURE_LIST.pluck('name').index_with do |feature_name|
-      feature_enabled?(feature_name)
+      send("feature_#{feature_name}?")
     end
   end
 
@@ -106,11 +123,27 @@ module Featurable
     all_features.select { |_feature, enabled| enabled == true }
   end
 
+  # Plan-gated effective features — this (not enabled_features/all_features) is
+  # what should be exposed to the frontend/API, since enabled_features reflects
+  # only the raw bitset without the per-account plan permission check. Same
+  # { name => true } shape as enabled_features (the frontend indexes into it
+  # directly — see accounts.js#isFeatureEnabledonAccount).
+  def effective_enabled_features
+    FEATURE_LIST.pluck('name').index_with { true }.select { |feature_name, _| feature_enabled?(feature_name) }
+  end
+
   def disabled_features
     all_features.select { |_feature, enabled| enabled == false }
   end
 
   private
+
+  def premium_feature_permitted?(name)
+    sub = subscription
+    return false if sub.blank? || !sub.usable?
+
+    sub.plan.present? && sub.plan.includes_feature?(name)
+  end
 
   def enable_default_features
     config = InstallationConfig.find_by(name: 'ACCOUNT_LEVEL_FEATURE_DEFAULTS')

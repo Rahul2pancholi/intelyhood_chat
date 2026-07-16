@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isOnChatwootCloud: 'globalConfig/isOnChatwootCloud',
+      isOnIntelychatCloud: 'globalConfig/isOnIntelychatCloud',
       isFeatureEnabledonAccount: 'accounts/isFeatureEnabledonAccount',
       records: 'sla/getSLA',
       currentUser: 'getCurrentUser',
@@ -170,7 +170,7 @@ export default {
       <SLAPaywallEnterprise
         v-if="isBehindAPaywall"
         :is-super-admin="isSuperAdmin"
-        :is-on-chatwoot-cloud="isOnChatwootCloud"
+        :is-on-chatwoot-cloud="isOnIntelychatCloud"
         @upgrade="onClickCTA"
       />
       <BaseTable

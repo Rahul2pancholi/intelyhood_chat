@@ -1,0 +1,14 @@
+<div class="field-unit__label">
+  <%= f.label field.attribute %>
+</div>
+<div class="field-unit__field">
+  <%=
+    f.select(
+      field.attribute,
+      options_for_select(
+        field.selectable_options.map { |status| [status.to_s.humanize, status] },
+        field.data
+      )
+    )
+  %>
+</div>

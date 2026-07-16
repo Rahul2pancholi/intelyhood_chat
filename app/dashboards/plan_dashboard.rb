@@ -11,7 +11,8 @@ class PlanDashboard < Administrate::BaseDashboard
     max_agents: Field::Number,
     max_inboxes: Field::Number,
     max_conversations_per_month: Field::Number,
-    stripe_price_id: Field::String,
+    razorpay_plan_id: Field::String,
+    included_features: PlanFeaturesField,
     active: Field::Boolean,
     position: Field::Number,
     account_subscriptions: Field::HasMany,
@@ -38,7 +39,8 @@ class PlanDashboard < Administrate::BaseDashboard
     max_agents
     max_inboxes
     max_conversations_per_month
-    stripe_price_id
+    razorpay_plan_id
+    included_features
     active
     position
     account_subscriptions
@@ -55,7 +57,8 @@ class PlanDashboard < Administrate::BaseDashboard
     max_agents
     max_inboxes
     max_conversations_per_month
-    stripe_price_id
+    razorpay_plan_id
+    included_features
     active
     position
   ].freeze

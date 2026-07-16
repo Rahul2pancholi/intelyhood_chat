@@ -8,13 +8,13 @@ class Api::V1::Accounts::BillingController < Api::V1::Accounts::BaseController
 
   def checkout_session
     plan = Plan.active.find(params[:plan_id])
-    session = Billing::CheckoutSessionService.new(account: Current.account, plan: plan).perform
-    render json: { url: session.url }
+    razorpay_subscription = Billing::CheckoutSessionService.new(account: Current.account, plan: plan).perform
+    render json: { url: razorpay_subscription.short_url }
   end
 
   def portal_session
-    session = Billing::PortalSessionService.new(account: Current.account).perform
-    render json: { url: session.url }
+    razorpay_subscription = Billing::PortalSessionService.new(account: Current.account).perform
+    render json: { url: razorpay_subscription.short_url }
   end
 
   private

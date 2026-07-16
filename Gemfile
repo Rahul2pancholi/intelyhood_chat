@@ -166,7 +166,7 @@ gem 'working_hours'
 gem 'pg_search'
 
 # Subscriptions, Billing
-gem 'stripe', '~> 18.0'
+gem 'razorpay', '~> 3.2'
 
 ## - helper gems --##
 ## to populate db with sample data

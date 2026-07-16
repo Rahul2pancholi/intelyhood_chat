@@ -12,10 +12,10 @@ const currentUser = useMapGetter('getCurrentUser');
 const isSuperAdmin = computed(() => {
   return currentUser.value.type === 'SuperAdmin';
 });
-const { accountId, isOnChatwootCloud } = useAccount();
+const { accountId, isOnIntelychatCloud } = useAccount();
 
 const i18nKey = computed(() =>
-  isOnChatwootCloud.value ? 'PAYWALL' : 'ENTERPRISE_PAYWALL'
+  isOnIntelychatCloud.value ? 'PAYWALL' : 'ENTERPRISE_PAYWALL'
 );
 const openBilling = () => {
   router.push({
@@ -34,7 +34,7 @@ const openBilling = () => {
       feature-prefix="SECURITY_SETTINGS.SAML"
       :i18n-key="i18nKey"
       :is-super-admin="isSuperAdmin"
-      :is-on-chatwoot-cloud="isOnChatwootCloud"
+      :is-on-chatwoot-cloud="isOnIntelychatCloud"
       @upgrade="openBilling"
     />
   </div>

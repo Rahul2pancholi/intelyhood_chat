@@ -1,4 +1,4 @@
-# Chatwoot Development Guidelines
+# Intelychat Development Guidelines
 
 ## Build / Test / Lint
 
@@ -113,7 +113,7 @@ Be lazy about the solution, never about reading — trace the actual code path b
 
 ## Enterprise Edition Notes
 
-- Chatwoot has an Enterprise overlay under `enterprise/` that extends/overrides OSS code.
+- Intelychat has an Enterprise overlay under `enterprise/` that extends/overrides OSS code.
 - When you add or modify core functionality, always check for corresponding files in `enterprise/` and keep behavior compatible.
 - Follow the Enterprise development practices documented here:
   - https://chatwoot.help/hc/handbook/articles/developing-enterprise-edition-features-38

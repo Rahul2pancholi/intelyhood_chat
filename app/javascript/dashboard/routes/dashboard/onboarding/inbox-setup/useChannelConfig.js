@@ -7,20 +7,20 @@ import { useMapGetter } from 'dashboard/composables/store';
 // Mirrors the availability checks in ChannelItem.vue.
 export function useChannelConfig() {
   const globalConfig = useMapGetter('globalConfig/get');
-  const isOnChatwootCloud = useMapGetter('globalConfig/isOnChatwootCloud');
-  const installationConfig = window.chatwootConfig || {};
+  const isOnIntelychatCloud = useMapGetter('globalConfig/isOnIntelychatCloud');
+  const installationConfig = window.intelychatConfig || {};
 
   const CHANNEL_CONFIGURED = {
     // WhatsApp is onboarded only via Meta embedded signup, which needs both the
     // app id (not the 'none' sentinel) and the signup configuration id.
     whatsapp: () =>
-      !isOnChatwootCloud.value &&
+      !isOnIntelychatCloud.value &&
       Boolean(installationConfig.whatsappAppId) &&
       installationConfig.whatsappAppId !== 'none' &&
       Boolean(installationConfig.whatsappConfigurationId),
     facebook: () => Boolean(installationConfig.fbAppId),
     instagram: () =>
-      !isOnChatwootCloud.value && Boolean(installationConfig.instagramAppId),
+      !isOnIntelychatCloud.value && Boolean(installationConfig.instagramAppId),
     tiktok: () => Boolean(installationConfig.tiktokAppId),
     gmail: () => Boolean(installationConfig.googleOAuthClientId),
     outlook: () => Boolean(globalConfig.value.azureAppId),

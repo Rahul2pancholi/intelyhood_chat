@@ -126,7 +126,7 @@ export default {
     ...mapGetters({
       accountId: 'getCurrentAccountId',
       isFeatureEnabledonAccount: 'accounts/isFeatureEnabledonAccount',
-      isOnChatwootCloud: 'globalConfig/isOnChatwootCloud',
+      isOnIntelychatCloud: 'globalConfig/isOnIntelychatCloud',
       uiFlags: 'inboxes/getUIFlags',
       portals: 'portals/allPortals',
     }),
@@ -138,10 +138,10 @@ export default {
     },
     showContinuityToggle() {
       if (this.isInboundEmailEnabled) return true;
-      return this.isOnChatwootCloud;
+      return this.isOnIntelychatCloud;
     },
     isContinuityDisabled() {
-      return this.isOnChatwootCloud && !this.isInboundEmailEnabled;
+      return this.isOnIntelychatCloud && !this.isInboundEmailEnabled;
     },
     continuityDescription() {
       if (this.isContinuityDisabled) {
@@ -349,7 +349,7 @@ export default {
       return this.isAnInstagramChannel && this.inbox.reauthorization_required;
     },
     showInstagramRestrictionSettingsBanner() {
-      return this.isOnChatwootCloud && this.isAnInstagramChannel;
+      return this.isOnIntelychatCloud && this.isAnInstagramChannel;
     },
     metaRestrictionStatusUrl() {
       return META_RESTRICTION_STATUS_URL;

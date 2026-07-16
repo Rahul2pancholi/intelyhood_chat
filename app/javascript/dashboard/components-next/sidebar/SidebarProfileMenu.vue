@@ -39,8 +39,8 @@ const showChatSupport = computed(() => {
   return (
     isFeatureEnabledonAccount.value(
       accountId.value,
-      FEATURE_FLAGS.CONTACT_CHATWOOT_SUPPORT_TEAM
-    ) && globalConfig.value.chatwootInboxToken
+      FEATURE_FLAGS.CONTACT_INTELYCHAT_SUPPORT_TEAM
+    ) && globalConfig.value.intelychatInboxToken
   );
 });
 

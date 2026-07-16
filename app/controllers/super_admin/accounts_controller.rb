@@ -37,7 +37,10 @@ class SuperAdmin::AccountsController < SuperAdmin::ApplicationController
     permitted_params = super
     permitted_params[:limits] = permitted_params[:limits].to_h.compact if permitted_params.key?(:limits)
     permitted_params[:captain_models] = permitted_params[:captain_models].to_h.compact_blank.presence if permitted_params.key?(:captain_models)
-    permitted_params[:selected_feature_flags] = params[:enabled_features].keys.map(&:to_sym) if params[:enabled_features].present?
+    if params.key?(:enabled_features)
+      enabled = params[:enabled_features].permit!.to_h.select { |_, value| ActiveModel::Type::Boolean.new.cast(value) }
+      permitted_params[:selected_feature_flags] = enabled.keys.map(&:to_sym)
+    end
     permitted_params
   end
 

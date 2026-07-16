@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_07_14_100000) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_16_130100) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -44,12 +44,13 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_14_100000) do
     t.bigint "account_id", null: false
     t.bigint "plan_id"
     t.string "status", default: "trialing", null: false
-    t.string "stripe_customer_id"
-    t.string "stripe_subscription_id"
+    t.string "razorpay_customer_id"
+    t.string "razorpay_subscription_id"
     t.datetime "current_period_end"
     t.integer "seats", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "razorpay_short_url"
     t.index ["account_id"], name: "index_account_subscriptions_on_account_id", unique: true
     t.index ["plan_id"], name: "index_account_subscriptions_on_plan_id"
   end
@@ -876,17 +877,17 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_14_100000) do
     t.string "source_object_type", null: false
     t.string "source_object_id", null: false
     t.integer "status", default: 0, null: false
-    t.string "chatwoot_record_type"
-    t.bigint "chatwoot_record_id"
+    t.string "intelychat_record_type"
+    t.bigint "intelychat_record_id"
     t.integer "attempt_count", default: 0, null: false
     t.string "last_error_code"
     t.text "last_error_message"
     t.jsonb "metadata", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["chatwoot_record_type", "chatwoot_record_id"], name: "idx_data_import_items_on_record"
     t.index ["data_import_id", "source_object_type", "source_object_id"], name: "idx_data_import_items_on_import_and_source", unique: true
     t.index ["data_import_id"], name: "index_data_import_items_on_data_import_id"
+    t.index ["intelychat_record_type", "intelychat_record_id"], name: "idx_data_import_items_on_intelychat_record"
     t.index ["source_provider", "source_object_type", "source_object_id"], name: "idx_data_import_items_on_source"
   end
 
@@ -896,14 +897,14 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_14_100000) do
     t.string "source_provider", null: false
     t.string "source_object_type", null: false
     t.string "source_object_id", null: false
-    t.string "chatwoot_record_type", null: false
-    t.bigint "chatwoot_record_id", null: false
+    t.string "intelychat_record_type", null: false
+    t.bigint "intelychat_record_id", null: false
     t.jsonb "metadata", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "source_provider", "source_object_type", "source_object_id"], name: "idx_data_import_mappings_on_account_and_source", unique: true
-    t.index ["chatwoot_record_type", "chatwoot_record_id"], name: "idx_data_import_mappings_on_record"
     t.index ["data_import_id"], name: "index_data_import_mappings_on_data_import_id"
+    t.index ["intelychat_record_type", "intelychat_record_id"], name: "idx_data_import_mappings_on_intelychat_record"
   end
 
   create_table "data_imports", force: :cascade do |t|
@@ -1185,11 +1186,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_14_100000) do
     t.integer "max_agents"
     t.integer "max_inboxes"
     t.integer "max_conversations_per_month"
-    t.string "stripe_price_id"
+    t.string "razorpay_plan_id"
     t.boolean "active", default: true, null: false
     t.integer "position", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "included_features", default: [], null: false
     t.index ["slug"], name: "index_plans_on_slug", unique: true
   end
 

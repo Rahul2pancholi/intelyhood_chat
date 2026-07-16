@@ -1,7 +1,7 @@
 import {
   ANALYTICS_IDENTITY,
-  CHATWOOT_RESET,
-  CHATWOOT_SET_USER,
+  INTELYCHAT_RESET,
+  INTELYCHAT_SET_USER,
 } from '../constants/appEvents';
 import AnalyticsHelper from './AnalyticsHelper';
 import DashboardAudioNotificationHelper from './AudioAlerts/DashboardAudioNotificationHelper';
@@ -34,13 +34,13 @@ export const initializeAudioAlerts = user => {
   });
 };
 
-export const initializeChatwootEvents = () => {
-  emitter.on(CHATWOOT_RESET, () => {
+export const initializeIntelychatEvents = () => {
+  emitter.on(INTELYCHAT_RESET, () => {
     if (window.$chatwoot) {
       window.$chatwoot.reset();
     }
   });
-  emitter.on(CHATWOOT_SET_USER, ({ user }) => {
+  emitter.on(INTELYCHAT_SET_USER, ({ user }) => {
     if (window.$chatwoot) {
       window.$chatwoot.setUser(user.email, {
         avatar_url: user.avatar_url,

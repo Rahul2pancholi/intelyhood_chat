@@ -69,7 +69,7 @@ export const IFrameHelper = {
     iframe.src = widgetUrl;
     iframe.allow =
       'camera;microphone;fullscreen;display-capture;picture-in-picture;clipboard-write;';
-    iframe.id = 'chatwoot_live_chat_widget';
+    iframe.id = 'intelychat_live_chat_widget';
     iframe.style.visibility = 'hidden';
 
     let holderClassName = `woot-widget-holder woot--hide woot-elements--${window.$chatwoot.position}`;
@@ -89,12 +89,12 @@ export const IFrameHelper = {
     IFrameHelper.initWindowSizeListener();
     IFrameHelper.preventDefaultScroll();
   },
-  getAppFrame: () => document.getElementById('chatwoot_live_chat_widget'),
+  getAppFrame: () => document.getElementById('intelychat_live_chat_widget'),
   getBubbleHolder: () => document.getElementsByClassName('woot--bubble-holder'),
   sendMessage: (key, value) => {
     const element = IFrameHelper.getAppFrame();
     element.contentWindow.postMessage(
-      `chatwoot-widget:${JSON.stringify({ event: key, ...value })}`,
+      `intelychat-widget:${JSON.stringify({ event: key, ...value })}`,
       '*'
     );
   },
@@ -102,11 +102,11 @@ export const IFrameHelper = {
     window.onmessage = e => {
       if (
         typeof e.data !== 'string' ||
-        e.data.indexOf('chatwoot-widget:') !== 0
+        e.data.indexOf('intelychat-widget:') !== 0
       ) {
         return;
       }
-      const message = JSON.parse(e.data.replace('chatwoot-widget:', ''));
+      const message = JSON.parse(e.data.replace('intelychat-widget:', ''));
       if (typeof IFrameHelper.events[message.event] === 'function') {
         IFrameHelper.events[message.event](message);
       }
@@ -299,7 +299,7 @@ export const IFrameHelper = {
   onLoad: ({ widgetColor }) => {
     const iframe = IFrameHelper.getAppFrame();
     iframe.style.visibility = '';
-    iframe.setAttribute('id', `chatwoot_live_chat_widget`);
+    iframe.setAttribute('id', `intelychat_live_chat_widget`);
 
     if (IFrameHelper.getBubbleHolder().length) {
       return;

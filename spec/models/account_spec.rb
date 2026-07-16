@@ -44,9 +44,9 @@ RSpec.describe Account do
   describe 'usage_limits' do
     let(:account) { create(:account) }
 
-    it 'returns ChatwootApp.max limits' do
-      expect(account.usage_limits[:agents]).to eq(ChatwootApp.max_limit)
-      expect(account.usage_limits[:inboxes]).to eq(ChatwootApp.max_limit)
+    it 'returns IntelychatApp.max limits' do
+      expect(account.usage_limits[:agents]).to eq(IntelychatApp.max_limit)
+      expect(account.usage_limits[:inboxes]).to eq(IntelychatApp.max_limit)
     end
   end
 
@@ -58,6 +58,7 @@ RSpec.describe Account do
       )
 
       account = create(:account)
+      account.subscription.update!(plan: Plan.find_by(slug: 'free'))
 
       expect(account).not_to be_feature_enabled('captain_integration')
       expect(account).not_to be_feature_enabled('captain_integration_v2')
@@ -384,6 +385,7 @@ RSpec.describe Account do
     describe 'with no saved preferences' do
       before do
         account.update!(captain_models: nil)
+        account.subscription.update!(plan: Plan.find_by(slug: 'free'))
       end
 
       it 'returns defaults from llm.yml' do
@@ -397,6 +399,11 @@ RSpec.describe Account do
       end
 
       it 'returns GPT-5.2 for assistant when Captain V2 is enabled' do
+        # captain_integration_v2 is a premium feature: the per-account bitset flag
+        # alone isn't enough, the account's plan must also grant it (see
+        # Featurable#feature_enabled?).
+        plan = create(:plan, included_features: ['captain_integration_v2'])
+        account.subscription.update!(plan: plan, status: 'active')
         account.enable_features!('captain_integration_v2')
 
         expect(account.captain_preferences[:models]['assistant']).to eq('gpt-5.2')

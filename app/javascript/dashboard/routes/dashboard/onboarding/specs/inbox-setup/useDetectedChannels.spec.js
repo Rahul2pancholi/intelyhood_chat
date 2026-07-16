@@ -14,7 +14,7 @@ vi.mock('vue-router');
 const mountComposable = ({
   brandInfo,
   inboxes = [],
-  isOnChatwootCloud = false,
+  isOnIntelychatCloud = false,
 } = {}) => {
   const store = createStore({
     modules: {
@@ -22,7 +22,7 @@ const mountComposable = ({
         namespaced: true,
         getters: {
           get: () => ({}),
-          isOnChatwootCloud: () => isOnChatwootCloud,
+          isOnIntelychatCloud: () => isOnIntelychatCloud,
         },
       },
       accounts: {
@@ -56,7 +56,7 @@ beforeEach(() => {
   useRoute.mockReturnValue({ params: { accountId: '1' } });
   // Configure the installation OAuth credentials so detected channels aren't
   // hidden by the config gate; individual tests clear this to assert hiding.
-  window.chatwootConfig = {
+  window.intelychatConfig = {
     fbAppId: 'fb',
     instagramAppId: 'ig',
     tiktokAppId: 'tt',
@@ -66,7 +66,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  delete window.chatwootConfig;
+  delete window.intelychatConfig;
 });
 
 describe('useDetectedChannels', () => {
@@ -180,7 +180,7 @@ describe('useDetectedChannels', () => {
     });
 
     it('gates the default suggestions by installation config, keeping the list non-empty', () => {
-      window.chatwootConfig = {}; // no OAuth credentials configured
+      window.intelychatConfig = {}; // no OAuth credentials configured
       const { displayedChannels } = mountComposable({ brandInfo: undefined });
 
       // Only the credential-free defaults survive (Telegram, LINE).
@@ -191,7 +191,7 @@ describe('useDetectedChannels', () => {
     });
 
     it('hides detected channels whose installation OAuth credentials are missing', () => {
-      window.chatwootConfig = {}; // nothing configured
+      window.intelychatConfig = {}; // nothing configured
       const { displayedChannels } = mountComposable({
         brandInfo: {
           socials: [
@@ -209,7 +209,7 @@ describe('useDetectedChannels', () => {
 
     it('hides Instagram from onboarding on Chatwoot Cloud', () => {
       const { displayedChannels } = mountComposable({
-        isOnChatwootCloud: true,
+        isOnIntelychatCloud: true,
         brandInfo: {
           socials: [
             { type: 'instagram', url: 'https://instagram.com/acme' },
@@ -264,7 +264,7 @@ describe('useDetectedChannels', () => {
     });
 
     it('excludes channels whose installation OAuth credentials are missing', () => {
-      window.chatwootConfig = {}; // nothing configured
+      window.intelychatConfig = {}; // nothing configured
       const { remainingChannels } = mountComposable({ brandInfo: {} });
 
       // The only configured channels (Telegram, LINE) are shown as default rows,

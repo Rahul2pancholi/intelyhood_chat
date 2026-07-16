@@ -1,0 +1,8 @@
+<div class="field-unit__label">
+  <%= f.label field.attribute %>
+</div>
+<%= render 'fields/account_features_field/features_browser',
+           grouped_features: SuperAdmin::AccountFeaturesHelper.grouped_features(field.data),
+           premium_features: SuperAdmin::AccountFeaturesHelper.account_premium_features,
+           editable: true,
+           community_plan: IntelychatHub.pricing_plan == 'community' %>

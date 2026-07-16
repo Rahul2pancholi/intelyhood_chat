@@ -1,0 +1,9 @@
+<% if Array(field.data).present? %>
+  <ul>
+    <% Array(field.data).each do |feature_name| %>
+      <li><%= field.display_name_for(feature_name) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  &mdash;
+<% end %>

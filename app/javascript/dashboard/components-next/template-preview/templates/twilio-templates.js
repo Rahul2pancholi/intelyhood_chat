@@ -129,10 +129,10 @@ export const twilioTemplates = [
     template_type: 'quick_reply',
   },
   {
-    body: 'What type of Intelychat installation are you using? Select "Intelychat Cloud" if you are using app.intelyhood.com, otherwise select "Self-hosted Intelychat".',
+    body: 'What type of Intelychat installation are you using? Select "Intelychat Cloud" if you are using app.intelychat.com, otherwise select "Self-hosted Intelychat".',
     types: {
       'twilio/quick-reply': {
-        body: 'What type of Intelychat installation are you using? Select "Intelychat Cloud" if you are using app.intelyhood.com, otherwise select "Self-hosted Intelychat".',
+        body: 'What type of Intelychat installation are you using? Select "Intelychat Cloud" if you are using app.intelychat.com, otherwise select "Self-hosted Intelychat".',
         actions: [
           {
             id: 'Intelychat Cloud_payload',

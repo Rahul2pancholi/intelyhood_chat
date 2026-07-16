@@ -1,0 +1,68 @@
+<% content_for(:title) do %>
+  <%= display_resource_name(page.resource_name) %>
+<% end %>
+
+<%
+  status_counts = AccountSubscription.group(:status).count
+  total_count = status_counts.values.sum
+  current_filter = params[:search].to_s.split(':').first.presence
+%>
+
+<header class="main-content__header" role="banner">
+  <div class="flex items-center justify-between w-full gap-4">
+    <div>
+      <h1 class="main-content__page-title m-0" id="page-title">
+        <%= content_for(:title) %>
+      </h1>
+      <p class="text-sm text-slate-500 m-0 mt-1">Manage account plans and billing status</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <% if show_search_bar %>
+        <%= render(
+          "search",
+          search_term: search_term,
+          resource_name: display_resource_name(page.resource_name)
+        ) %>
+      <% end %>
+
+      <%= link_to(
+        t("administrate.actions.new_resource", name: page.resource_name.titleize.downcase),
+        [:new, namespace, page.resource_path.to_sym],
+        class: "button"
+      ) if accessible_action?(new_resource, :new) %>
+    </div>
+  </div>
+</header>
+
+<section class="main-content__body">
+  <div class="subscription-filters mb-4">
+    <%= link_to super_admin_account_subscriptions_path, class: "subscription-filter-chip #{'is-active' if current_filter.blank?}" do %>
+      <span>All</span>
+      <span class="subscription-filter-chip__count"><%= total_count %></span>
+    <% end %>
+
+    <% AccountSubscription::STATUSES.each do |status| %>
+      <%= link_to(
+        super_admin_account_subscriptions_path(search: "#{status}:"),
+        class: "subscription-filter-chip subscription-filter-chip--#{status.tr('_', '-')} #{'is-active' if current_filter == status}"
+      ) do %>
+        <span><%= status.humanize %></span>
+        <span class="subscription-filter-chip__count"><%= status_counts[status] || 0 %></span>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="subscription-table-wrap">
+    <%= render(
+      "collection",
+      collection_presenter: page,
+      collection_field_name: resource_name,
+      page: page,
+      resources: resources,
+      table_title: "page-title"
+    ) %>
+  </div>
+
+  <%= paginate resources, param_name: '_page' %>
+</section>

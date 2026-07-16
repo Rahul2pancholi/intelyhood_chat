@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength
-namespace :chatwoot do
+namespace :intelychat do
   namespace :dev do
-    desc 'Toggle between Chatwoot variants with interactive menu'
+    desc 'Toggle between Intelychat variants with interactive menu'
     task toggle_variant: :environment do
       # Only allow in development environment
       return unless Rails.env.development?
@@ -13,7 +13,7 @@ namespace :chatwoot do
       handle_user_selection
     end
 
-    desc 'Show current Chatwoot variant status'
+    desc 'Show current Intelychat variant status'
     task show_variant: :environment do
       return unless Rails.env.development?
 
@@ -24,7 +24,7 @@ namespace :chatwoot do
 
     def show_current_variant
       puts "\n#{('=' * 50)}"
-      puts '🚀 CHATWOOT VARIANT MANAGER'
+      puts '🚀 INTELYCHAT VARIANT MANAGER'
       puts '=' * 50
 
       # Check InstallationConfig

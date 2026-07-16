@@ -2,16 +2,17 @@
 #
 # Table name: account_subscriptions
 #
-#  id                     :bigint           not null, primary key
-#  current_period_end     :datetime
-#  seats                  :integer          default(1), not null
-#  status                 :string           default("trialing"), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  account_id             :bigint           not null
-#  plan_id                :bigint
-#  stripe_customer_id     :string
-#  stripe_subscription_id :string
+#  id                       :bigint           not null, primary key
+#  current_period_end       :datetime
+#  razorpay_short_url       :string
+#  seats                    :integer          default(1), not null
+#  status                   :string           default("trialing"), not null
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  account_id               :bigint           not null
+#  plan_id                  :bigint
+#  razorpay_customer_id     :string
+#  razorpay_subscription_id :string
 #
 # Indexes
 #
@@ -44,5 +45,11 @@ class AccountSubscription < ApplicationRecord
     return true if limit.blank?
 
     account.inboxes.count < limit
+  end
+
+  # A subscription still grants access to its plan's paid features while trialing
+  # or active; past_due/canceled do not (see Featurable#feature_enabled?).
+  def usable?
+    %w[trialing active].include?(status)
   end
 end

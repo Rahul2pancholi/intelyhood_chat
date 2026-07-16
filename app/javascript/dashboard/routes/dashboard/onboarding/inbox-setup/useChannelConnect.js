@@ -24,13 +24,13 @@ export function useChannelConnect() {
   const { t } = useI18n();
   const store = useStore();
   const { runEmbeddedSignup } = useWhatsappEmbeddedSignup();
-  const { isOnChatwootCloud } = useAccount();
+  const { isOnIntelychatCloud } = useAccount();
 
   const connectViaOAuth = async provider => {
     const client = OAUTH_CLIENTS[provider];
     if (!client) return;
 
-    if (provider === 'instagram' && isOnChatwootCloud.value) {
+    if (provider === 'instagram' && isOnIntelychatCloud.value) {
       useAlert(t('INBOX_MGMT.ADD.INSTAGRAM.RESTRICTED_WARNING'));
       return;
     }

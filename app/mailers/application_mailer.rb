@@ -1,7 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
 
-  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'Intelychat <accounts@intelyhood.com>')
+  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'Intelychat <accounts@intelychat.com>')
   before_action { ensure_current_account(params.try(:[], :account)) }
   around_action :switch_locale
   layout 'mailer/base'

@@ -590,7 +590,8 @@
       },
       "OPTIONS": {
         "USD": "US Dollar (USD)",
-        "BRL": "Brazilian Real (BRL)"
+        "BRL": "Brazilian Real (BRL)",
+        "INR": "Indian Rupee (INR)"
       }
     },
     "VIEW_PRICING": "View Pricing",

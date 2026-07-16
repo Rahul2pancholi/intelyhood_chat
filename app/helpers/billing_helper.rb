@@ -2,7 +2,7 @@ module BillingHelper
   private
 
   def default_plan?(account)
-    installation_config = InstallationConfig.find_by(name: 'CHATWOOT_CLOUD_PLANS')
+    installation_config = InstallationConfig.find_by(name: 'INTELYCHAT_CLOUD_PLANS')
     default_plan = installation_config&.value&.first
 
     # Return false if not plans are configured, so that no checks are enforced
@@ -21,17 +21,5 @@ module BillingHelper
 
   def agents(account)
     account.users.count
-  end
-
-  # current_period_end moved to the subscription item in newer Stripe API versions; read both.
-  def subscription_period_end(subscription)
-    subscription['current_period_end'] || subscription['items']['data'].first&.[]('current_period_end')
-  end
-
-  def subscription_ends_on(subscription)
-    period_end = subscription_period_end(subscription)
-    return if period_end.blank?
-
-    Time.zone.at(period_end)
   end
 end

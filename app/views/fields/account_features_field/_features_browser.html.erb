@@ -1,0 +1,168 @@
+<%#
+  locals:
+  - grouped_features
+  - premium_features
+  - editable (boolean)
+  - community_plan (optional, for editable)
+%>
+<%= javascript_include_tag 'accountFeaturesFilter' %>
+
+<div class="<%= editable ? 'field-unit__field feature-container' : 'w-full' %>" data-account-features>
+  <div class="rounded-xl border border-slate-200 bg-white overflow-hidden">
+    <div class="border-b border-slate-200 bg-slate-50 px-4 py-4 space-y-4">
+      <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+        <div class="relative flex-1">
+          <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg width="16" height="16"><use xlink:href="#icon-menu-search-line" /></svg>
+          </span>
+          <input
+            type="search"
+            data-feature-search
+            oninput="filterAccountFeatures(event)"
+            placeholder="Search by feature name..."
+            class="w-full h-11 pl-10 pr-3 text-sm bg-white border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500"
+          />
+        </div>
+
+        <% if editable %>
+          <div class="flex shrink-0 gap-2">
+            <button
+              type="button"
+              class="h-11 px-4 text-sm font-medium rounded-xl border border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100"
+              onclick="toggleVisibleFeatures(event, true)"
+            >
+              Select all
+            </button>
+            <button
+              type="button"
+              class="h-11 px-4 text-sm font-medium rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+              onclick="toggleVisibleFeatures(event, false)"
+            >
+              Deselect all
+            </button>
+          </div>
+        <% end %>
+      </div>
+
+      <div>
+        <p class="text-xxs uppercase tracking-wide text-slate-400 font-semibold m-0 mb-2">Category</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-feature-category="all" class="feature-chip is-active" onclick="selectFeatureCategory(event)">
+            All
+          </button>
+          <% grouped_features.each do |group| %>
+            <button type="button" data-feature-category="<%= group[:key] %>" class="feature-chip" onclick="selectFeatureCategory(event)">
+              <%= group[:label] %>
+              <span class="opacity-70">(<%= group[:features].size %>)</span>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <% channel_group = grouped_features.find { |group| group[:key] == :channels } %>
+      <% if channel_group.present? && channel_group[:subgroups].present? %>
+        <div data-channel-filters>
+          <p class="text-xxs uppercase tracking-wide text-slate-400 font-semibold m-0 mb-2">Channel type</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-channel-type="all" class="feature-chip is-active" onclick="selectChannelType(event)">
+              All channels
+            </button>
+            <% channel_group[:subgroups].each do |subgroup| %>
+              <button type="button" data-channel-type="<%= subgroup[:key] %>" class="feature-chip" onclick="selectChannelType(event)">
+                <svg width="14" height="14"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
+                <%= subgroup[:label] %>
+              </button>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if editable %>
+        <p class="text-xs text-slate-500 m-0">
+          Select all / Deselect all only affects currently visible features.
+        </p>
+      <% end %>
+    </div>
+
+    <div class="p-4 space-y-6">
+      <% grouped_features.each do |group| %>
+        <section data-feature-group="<%= group[:key] %>" class="space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h4 class="text-sm font-semibold text-slate-800 m-0"><%= group[:label] %></h4>
+              <p class="text-xs text-slate-500 m-0 mt-1"><%= group[:description] %></p>
+            </div>
+            <% if editable %>
+              <div class="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 overflow-hidden shrink-0">
+                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-violet-700 hover:bg-violet-50" onclick="toggleSectionFeatures(event, true)">Select</button>
+                <span class="w-px self-stretch bg-slate-200"></span>
+                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-slate-500 hover:bg-slate-100" onclick="toggleSectionFeatures(event, false)">Clear</button>
+              </div>
+            <% end %>
+          </div>
+
+          <% if group[:subgroups].present? %>
+            <div class="space-y-4">
+              <% group[:subgroups].each do |subgroup| %>
+                <div data-feature-subgroup="<%= subgroup[:key] %>" class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div class="flex items-center justify-between gap-3 mb-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 shrink-0">
+                        <svg width="16" height="16"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
+                      </span>
+                      <div class="min-w-0">
+                        <h5 class="text-sm font-semibold text-slate-800 m-0"><%= subgroup[:label] %></h5>
+                        <p class="text-xxs text-slate-500 m-0 truncate"><%= subgroup[:description] %></p>
+                      </div>
+                    </div>
+                    <% if editable %>
+                      <div class="inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden shrink-0">
+                        <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-violet-700 hover:bg-violet-50" onclick="toggleSectionFeatures(event, true)">Select</button>
+                        <span class="w-px self-stretch bg-slate-200"></span>
+                        <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-slate-500 hover:bg-slate-100" onclick="toggleSectionFeatures(event, false)">Clear</button>
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
+                    <% subgroup[:features].each do |key_array, val| %>
+                      <%= render 'fields/account_features_field/feature_card',
+                                 feature_key: key_array.first,
+                                 display_name: key_array.last,
+                                 enabled: val,
+                                 category: group[:key],
+                                 channel_type: subgroup[:key],
+                                 channel_label: subgroup[:label],
+                                 premium_features: premium_features,
+                                 editable: editable,
+                                 community_plan: local_assigns[:community_plan] %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div data-feature-grid class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
+              <% group[:features].each do |key_array, val| %>
+                <%= render 'fields/account_features_field/feature_card',
+                           feature_key: key_array.first,
+                           display_name: key_array.last,
+                           enabled: val,
+                           category: group[:key],
+                           channel_type: nil,
+                           channel_label: nil,
+                           premium_features: premium_features,
+                           editable: editable,
+                           community_plan: local_assigns[:community_plan] %>
+              <% end %>
+            </div>
+          <% end %>
+        </section>
+      <% end %>
+
+      <p data-feature-empty class="hidden text-sm text-slate-500 text-center py-8 m-0">
+        No features match your search.
+      </p>
+    </div>
+  </div>
+</div>

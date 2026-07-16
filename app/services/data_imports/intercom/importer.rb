@@ -150,7 +150,7 @@ class DataImports::Intercom::Importer
     inbox = @placeholder_inboxes.inbox_for(source_type)
     contact_inbox = contact_inbox_for(contact, inbox)
 
-    mapped_conversation = mapping&.chatwoot_record
+    mapped_conversation = mapping&.intelychat_record
     if mapped_conversation && mapping.data_import_id != @data_import.id
       skip_already_imported_item(item, mapping, already_handled: already_handled)
       import_source_message(conversation, mapped_conversation, contact)
@@ -159,16 +159,16 @@ class DataImports::Intercom::Importer
       return
     end
 
-    chatwoot_conversation = mapped_conversation || create_conversation(conversation, contact, contact_inbox, inbox, source_type)
+    intelychat_conversation = mapped_conversation || create_conversation(conversation, contact, contact_inbox, inbox, source_type)
     if mapped_conversation
-      record_mapping('conversation', source_id, chatwoot_conversation, metadata: conversation_metadata(conversation, inbox, source_type))
+      record_mapping('conversation', source_id, intelychat_conversation, metadata: conversation_metadata(conversation, inbox, source_type))
     end
-    item.update!(status: :imported, chatwoot_record_type: 'Conversation', chatwoot_record_id: chatwoot_conversation.id)
+    item.update!(status: :imported, intelychat_record_type: 'Conversation', intelychat_record_id: intelychat_conversation.id)
     increment_stat('conversations', 'imported') unless already_handled
 
-    import_source_message(conversation, chatwoot_conversation, contact)
-    import_conversation_parts(conversation, chatwoot_conversation, contact)
-    update_conversation_activity(chatwoot_conversation)
+    import_source_message(conversation, intelychat_conversation, contact)
+    import_conversation_parts(conversation, intelychat_conversation, contact)
+    update_conversation_activity(intelychat_conversation)
   rescue StandardError => e
     raise if e.is_a?(DataImports::Intercom::Client::Error)
 
@@ -191,7 +191,7 @@ class DataImports::Intercom::Importer
 
   def import_contact(contact_payload, required_for_conversation: false)
     source_id = source_id_for(contact_payload)
-    if source_id.present? && (mapping = find_mapping('contact', source_id)) && (mapped_contact = mapping.chatwoot_record)
+    if source_id.present? && (mapping = find_mapping('contact', source_id)) && (mapped_contact = mapping.intelychat_record)
       return reuse_mapped_contact(contact_payload, source_id, mapping, mapped_contact)
     end
 
@@ -201,7 +201,7 @@ class DataImports::Intercom::Importer
     item = import_item('contact', source_id, contact_payload)
     mapping = find_mapping('contact', source_id)
 
-    mapped_contact = mapping&.chatwoot_record
+    mapped_contact = mapping&.intelychat_record
     if mapped_contact && mapping.data_import_id != @data_import.id
       skip_already_imported_item(item, mapping, already_handled: already_handled)
       return mapped_contact
@@ -211,7 +211,7 @@ class DataImports::Intercom::Importer
       imported_contact = mapped_contact || find_existing_contact(contact_payload) || create_contact(contact_payload)
       update_existing_contact(imported_contact, contact_payload)
       record_mapping('contact', source_id, imported_contact, metadata: contact_metadata(contact_payload))
-      item.update!(status: :imported, chatwoot_record_type: 'Contact', chatwoot_record_id: imported_contact.id)
+      item.update!(status: :imported, intelychat_record_type: 'Contact', intelychat_record_id: imported_contact.id)
       imported_contact
     end
     increment_stat('contacts', 'imported') unless already_handled
@@ -359,17 +359,17 @@ class DataImports::Intercom::Importer
 
     Conversation.transaction do
       result = Conversation.insert_all!([attrs], returning: %w[id])
-      chatwoot_conversation = Conversation.find(result.rows.first.first)
-      record_mapping('conversation', source_id, chatwoot_conversation, metadata: metadata)
-      chatwoot_conversation
+      intelychat_conversation = Conversation.find(result.rows.first.first)
+      record_mapping('conversation', source_id, intelychat_conversation, metadata: metadata)
+      intelychat_conversation
     end
   rescue ActiveRecord::RecordNotUnique
-    @account.conversations.find_by!(identifier: conversation_identifier(conversation)).tap do |chatwoot_conversation|
-      record_mapping('conversation', source_id, chatwoot_conversation, metadata: metadata)
+    @account.conversations.find_by!(identifier: conversation_identifier(conversation)).tap do |intelychat_conversation|
+      record_mapping('conversation', source_id, intelychat_conversation, metadata: metadata)
     end
   end
 
-  def import_source_message(conversation, chatwoot_conversation, contact)
+  def import_source_message(conversation, intelychat_conversation, contact)
     source = conversation['source'].to_h
     return unless source_message_importable?(source)
 
@@ -377,20 +377,20 @@ class DataImports::Intercom::Importer
     source_part = source.merge('part_type' => 'source', 'created_at' => conversation['created_at'])
     if (mapping = find_mapping('message', message_source_id)) && message_mapping_handled?(mapping, source_part)
       if mapping.data_import_id == @data_import.id
-        reconcile_current_run_message_mapping(chatwoot_conversation, mapping, source_part)
+        reconcile_current_run_message_mapping(intelychat_conversation, mapping, source_part)
         return
       end
 
-      skip_existing_message_mapping(chatwoot_conversation, mapping, source_part)
+      skip_existing_message_mapping(intelychat_conversation, mapping, source_part)
       return
     end
 
-    create_message(chatwoot_conversation, contact, source_part, message_source_id)
+    create_message(intelychat_conversation, contact, source_part, message_source_id)
   rescue StandardError => e
-    fail_message(chatwoot_conversation, message_source_id, source_part, e)
+    fail_message(intelychat_conversation, message_source_id, source_part, e)
   end
 
-  def import_conversation_parts(conversation, chatwoot_conversation, contact)
+  def import_conversation_parts(conversation, intelychat_conversation, contact)
     parts_payload = conversation['conversation_parts'].to_h
     parts = Array(parts_payload['conversation_parts'])
     record_truncated_conversation_parts(conversation, parts.size)
@@ -399,17 +399,17 @@ class DataImports::Intercom::Importer
       message_source_id = "conversation:#{source_id_for(conversation)}:part:#{part['id']}"
       if (mapping = find_mapping('message', message_source_id)) && message_mapping_handled?(mapping, part)
         if mapping.data_import_id == @data_import.id
-          reconcile_current_run_message_mapping(chatwoot_conversation, mapping, part)
+          reconcile_current_run_message_mapping(intelychat_conversation, mapping, part)
           next
         end
 
-        skip_existing_message_mapping(chatwoot_conversation, mapping, part)
+        skip_existing_message_mapping(intelychat_conversation, mapping, part)
         next
       end
 
-      create_message(chatwoot_conversation, contact, part, message_source_id)
+      create_message(intelychat_conversation, contact, part, message_source_id)
     rescue StandardError => e
-      fail_message(chatwoot_conversation, message_source_id, part, e)
+      fail_message(intelychat_conversation, message_source_id, part, e)
     end
   end
 
@@ -446,7 +446,7 @@ class DataImports::Intercom::Importer
       already_recorded = skip_log_recorded?('message', message_source_id, SKIPPED_MESSAGE_ERROR_CODE)
       record_skipped_message_log(conversation, message_source_id, part)
       increment_stat('messages', 'skipped') unless already_recorded
-      return mapping.chatwoot_record
+      return mapping.intelychat_record
     end
 
     DataImportMapping.create!(
@@ -455,8 +455,8 @@ class DataImports::Intercom::Importer
       source_provider: PROVIDER,
       source_object_type: 'message',
       source_object_id: message_source_id,
-      chatwoot_record_type: 'Conversation',
-      chatwoot_record_id: conversation.id,
+      intelychat_record_type: 'Conversation',
+      intelychat_record_id: conversation.id,
       metadata: message_metadata(part).merge(skipped: true, reason: 'blank_or_unsupported_intercom_part')
     )
     record_skipped_message_log(conversation, message_source_id, part)
@@ -614,8 +614,8 @@ class DataImports::Intercom::Importer
       source_object_id: source_id
     ).tap do |mapping|
       mapping.data_import = @data_import
-      mapping.chatwoot_record_type = record.class.name
-      mapping.chatwoot_record_id = record.id
+      mapping.intelychat_record_type = record.class.name
+      mapping.intelychat_record_id = record.id
       mapping.metadata = metadata
       mapping.save!
     end
@@ -628,7 +628,7 @@ class DataImports::Intercom::Importer
       source_object_id: source_id
     )
     item = import_item('contact', source_id, contact_payload) unless item&.imported?
-    item.update!(status: :imported, chatwoot_record_type: 'Contact', chatwoot_record_id: mapped_contact.id)
+    item.update!(status: :imported, intelychat_record_type: 'Contact', intelychat_record_id: mapped_contact.id)
     reconcile_item_stats('contact')
   end
 
@@ -654,8 +654,8 @@ class DataImports::Intercom::Importer
   def skip_already_imported_item(item, mapping, already_handled:)
     item.update!(
       status: :skipped,
-      chatwoot_record_type: mapping.chatwoot_record_type,
-      chatwoot_record_id: mapping.chatwoot_record_id,
+      intelychat_record_type: mapping.intelychat_record_type,
+      intelychat_record_id: mapping.intelychat_record_id,
       last_error_code: ALREADY_IMPORTED_ERROR_CODE,
       last_error_message: 'Already imported in a previous import.'
     )
@@ -682,7 +682,7 @@ class DataImports::Intercom::Importer
   def message_mapping_handled?(mapping, part)
     return false if mapping.metadata['skipped'] && activity_part?(part)
 
-    mapping.metadata['skipped'] || mapping.chatwoot_record.present?
+    mapping.metadata['skipped'] || mapping.intelychat_record.present?
   end
 
   def fail_item(item, error)
@@ -740,8 +740,8 @@ class DataImports::Intercom::Importer
         reason: 'already_imported',
         source_provider: PROVIDER,
         previous_data_import_id: mapping.data_import_id,
-        chatwoot_record_type: mapping.chatwoot_record_type,
-        chatwoot_record_id: mapping.chatwoot_record_id
+        intelychat_record_type: mapping.intelychat_record_type,
+        intelychat_record_id: mapping.intelychat_record_id
       }
     )
   end

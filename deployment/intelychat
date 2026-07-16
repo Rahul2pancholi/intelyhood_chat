@@ -1,0 +1,6 @@
+# give intelychat user permission to start/stop/restart intelychat systemd service
+
+%intelychat ALL=NOPASSWD: /bin/systemctl start intelychat.target
+%intelychat ALL=NOPASSWD: /bin/systemctl stop intelychat.target
+%intelychat ALL=NOPASSWD: /bin/systemctl restart intelychat.target
+%intelychat ALL=NOPASSWD: /usr/local/bin/cwctl

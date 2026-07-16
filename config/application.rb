@@ -33,7 +33,7 @@ if ENV.fetch('JUDOSCALE_URL', false).present?
   require 'judoscale-sidekiq'
 end
 
-module Chatwoot
+module Intelychat
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
@@ -48,7 +48,7 @@ module Chatwoot
     config.generators.javascripts = false
     config.generators.stylesheets = false
 
-    # Custom chatwoot configurations
+    # Custom intelychat configurations
     config.x = config_for(:app).with_indifferent_access
 
     # https://stackoverflow.com/questions/72970170/upgrading-to-rails-6-1-6-1-causes-psychdisallowedclass-tried-to-load-unspecif

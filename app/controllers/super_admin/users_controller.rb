@@ -9,8 +9,9 @@ class SuperAdmin::UsersController < SuperAdmin::ApplicationController
     if resource.save
       redirect_to super_admin_user_path(resource), notice: translate_with_resource('create.success')
     else
-      notice = resource.errors.full_messages.first
-      redirect_to new_super_admin_user_path, notice: notice
+      render :new, locals: {
+        page: Administrate::Page::Form.new(dashboard, resource)
+      }, status: :unprocessable_entity
     end
   end
 
