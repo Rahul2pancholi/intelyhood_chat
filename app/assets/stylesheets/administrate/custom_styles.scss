@@ -96,3 +96,24 @@
     }
   }
 }
+
+// The account-features field renders its own "Account Features" heading
+// (see _features_browser.html.erb), so the auto-humanized "All features"
+// field-unit label is redundant. It's also the wrong shape for this field:
+// .field-unit's narrow 15%-wide label column (see _field-unit.scss) collides
+// with feature-container's much wider/taller content, wrapping the label
+// text and centering it against the full grid height.
+.field-unit--account-features-field {
+  align-items: flex-start;
+  display: block;
+
+  .field-unit__label {
+    display: none;
+  }
+
+  .field-unit__field {
+    margin-left: 0;
+    max-width: none;
+    width: 100%;
+  }
+}
