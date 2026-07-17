@@ -1,5 +1,13 @@
-<svg width="2559" height="581" viewBox="0 0 2559 581" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M256 546C397.385 546 512 431.385 512 290C512 148.615 397.385 34 256 34C114.615 34 0 148.615 0 290C0 431.385 114.615 546 256 546Z" fill="#F97316"/>
-<path d="M367 410H247.99C182.388 410 129 356.608 129 290.989C129 225.392 182.388 172 247.992 172C313.612 172 367 225.392 367 290.989V410Z" fill="white" stroke="white" stroke-width="6"/>
-<text x="600" y="410" font-family="Arial, Helvetica, sans-serif" font-size="320" font-weight="700" fill="white">Intelychat</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 200" width="2559" height="581">
+  <!-- flat indigo bubble, no tile -->
+  <g transform="translate(18 18) scale(0.72)">
+    <path d="M60 20 h110 a44 44 0 0 1 44 44 v56 a44 44 0 0 1 -44 44 h-56 l-38 33 c-6.5 5.5 -16.5 1 -15.8 -7.5 l2 -25.5 a44 44 0 0 1 -46.2 -44 v-56 a44 44 0 0 1 44 -44 z"
+          fill="#4F46E5"/>
+    <circle cx="88" cy="94" r="12" fill="#FFFFFF"/>
+    <circle cx="122" cy="94" r="12" fill="#FFFFFF"/>
+    <circle cx="156" cy="94" r="12" fill="#FFFFFF"/>
+  </g>
+  <!-- lowercase rounded wordmark, single color, white for dark backgrounds -->
+  <text x="210" y="130" font-family="'Nunito','Varela Round','Segoe UI',system-ui,sans-serif"
+        font-size="84" font-weight="800" fill="#FFFFFF" letter-spacing="-2">intelychat</text>
 </svg>
