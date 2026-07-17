@@ -6,5 +6,5 @@
       <path d="M100 84 h56 a22 22 0 0 1 22 22 v78 l-78 -0 a22 22 0 0 1 -22 -22 v-56 a22 22 0 0 1 22 -22 z" fill="#000"/>
     </mask>
   </defs>
-  <circle cx="120" cy="120" r="100" fill="#111111" mask="url(#cut)"/>
+  <circle cx="120" cy="120" r="100" fill="#4F46E5" mask="url(#cut)"/>
 </svg>

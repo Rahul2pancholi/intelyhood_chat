@@ -6,8 +6,8 @@
     </mask>
   </defs>
   <g transform="translate(20 30) scale(0.58)">
-    <circle cx="120" cy="120" r="100" fill="#111111" mask="url(#cut)"/>
+    <circle cx="120" cy="120" r="100" fill="#4F46E5" mask="url(#cut)"/>
   </g>
   <text x="180" y="138" font-family="'Inter','Helvetica Neue','Segoe UI',system-ui,sans-serif"
-        font-size="86" font-weight="700" fill="#111111" letter-spacing="-3">intelychat</text>
+        font-size="86" font-weight="700" fill="#1E1B4B" letter-spacing="-3">intelychat</text>
 </svg>

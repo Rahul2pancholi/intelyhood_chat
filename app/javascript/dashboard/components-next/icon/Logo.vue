@@ -35,7 +35,7 @@ const globalConfig = useMapGetter('globalConfig/get');
       cx="120"
       cy="120"
       r="100"
-      fill="#111111"
+      fill="#4F46E5"
       mask="url(#intelychat-logo-mark-cut)"
     />
   </svg>
