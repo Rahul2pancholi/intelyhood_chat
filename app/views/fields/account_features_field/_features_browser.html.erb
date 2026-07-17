@@ -28,14 +28,14 @@
           <div class="flex shrink-0 gap-2">
             <button
               type="button"
-              class="h-11 px-4 text-sm font-medium rounded-xl bg-n-solid-blue text-n-blue-text hover:opacity-90"
+              class="reset-base h-11 px-4 text-sm font-medium rounded-xl bg-n-solid-blue text-n-blue-text hover:opacity-90"
               onclick="toggleVisibleFeatures(event, true)"
             >
               Select all
             </button>
             <button
               type="button"
-              class="h-11 px-4 text-sm font-medium rounded-xl outline outline-1 outline-n-weak bg-n-solid-2 text-n-slate-11 hover:bg-n-alpha-2"
+              class="reset-base h-11 px-4 text-sm font-medium rounded-xl outline outline-1 outline-n-weak bg-n-solid-2 text-n-slate-11 hover:bg-n-alpha-2"
               onclick="toggleVisibleFeatures(event, false)"
             >
               Deselect all
@@ -47,11 +47,11 @@
       <div>
         <p class="text-xxs uppercase tracking-wide text-n-slate-9 font-semibold m-0 mb-2">Category</p>
         <div class="flex flex-wrap gap-2">
-          <button type="button" data-feature-category="all" class="feature-chip is-active" onclick="selectFeatureCategory(event)">
+          <button type="button" data-feature-category="all" class="reset-base feature-chip is-active" onclick="selectFeatureCategory(event)">
             All
           </button>
           <% grouped_features.each do |group| %>
-            <button type="button" data-feature-category="<%= group[:key] %>" class="feature-chip" onclick="selectFeatureCategory(event)">
+            <button type="button" data-feature-category="<%= group[:key] %>" class="reset-base feature-chip" onclick="selectFeatureCategory(event)">
               <%= group[:label] %>
               <span class="opacity-70">(<%= group[:features].size %>)</span>
             </button>
@@ -64,11 +64,11 @@
         <div data-channel-filters>
           <p class="text-xxs uppercase tracking-wide text-n-slate-9 font-semibold m-0 mb-2">Channel type</p>
           <div class="flex flex-wrap gap-2">
-            <button type="button" data-channel-type="all" class="feature-chip is-active" onclick="selectChannelType(event)">
+            <button type="button" data-channel-type="all" class="reset-base feature-chip is-active" onclick="selectChannelType(event)">
               All channels
             </button>
             <% channel_group[:subgroups].each do |subgroup| %>
-              <button type="button" data-channel-type="<%= subgroup[:key] %>" class="feature-chip" onclick="selectChannelType(event)">
+              <button type="button" data-channel-type="<%= subgroup[:key] %>" class="reset-base feature-chip" onclick="selectChannelType(event)">
                 <svg width="14" height="14"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
                 <%= subgroup[:label] %>
               </button>
@@ -94,9 +94,9 @@
             </div>
             <% if editable %>
               <div class="inline-flex items-center rounded-lg outline outline-1 outline-n-weak overflow-hidden shrink-0">
-                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-n-blue-text hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, true)">Select</button>
+                <button type="button" class="reset-base px-2.5 py-1.5 text-xxs font-medium text-n-blue-text hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, true)">Select</button>
                 <span class="w-px self-stretch bg-n-weak"></span>
-                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-n-slate-10 hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, false)">Clear</button>
+                <button type="button" class="reset-base px-2.5 py-1.5 text-xxs font-medium text-n-slate-10 hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, false)">Clear</button>
               </div>
             <% end %>
           </div>
