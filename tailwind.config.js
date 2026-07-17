@@ -42,6 +42,17 @@ const tailwindConfig = {
         inter: ['Inter', ...defaultSansFonts],
         interDisplay: ['InterDisplay', ...defaultSansFonts],
       },
+      borderRadius: {
+        lg: '0.75rem',
+        xl: '1rem',
+        '2xl': '1.25rem',
+      },
+      boxShadow: {
+        'soft-sm': '0 1px 2px 0 rgb(17 17 19 / 0.04), 0 1px 1px 0 rgb(17 17 19 / 0.03)',
+        soft: '0 4px 12px -2px rgb(17 17 19 / 0.06), 0 2px 4px -2px rgb(17 17 19 / 0.04)',
+        'soft-lg': '0 12px 24px -4px rgb(17 17 19 / 0.08), 0 4px 8px -4px rgb(17 17 19 / 0.04)',
+        brand: '0 4px 14px -2px rgb(79 70 229 / 0.25)',
+      },
       fontWeight: {
         420: '420',
         440: '440',
