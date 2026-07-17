@@ -1,5 +1,4 @@
 <% is_premium = premium_features.include?(feature_key) %>
-<% icon = SuperAdmin::AccountFeaturesHelper.feature_icon(feature_key) %>
 <%# This bitset flag is a Super Admin override, independent of IntelychatHub's
     installation-level community/enterprise license — actual premium access is
     now enforced per-account via Featurable#feature_enabled? against the
@@ -17,9 +16,6 @@
     <% if channel_type.present? %>data-channel-type="<%= channel_type %>"<% end %>
   >
     <div class="flex items-center gap-3 min-w-0">
-      <span class="flex items-center justify-center w-9 h-9 shrink-0 rounded-lg bg-n-alpha-2 text-n-slate-11">
-        <svg width="16" height="16"><use xlink:href="#<%= icon %>" /></svg>
-      </span>
       <div class="min-w-0">
         <div class="flex items-center gap-2">
           <span class="text-sm font-medium text-n-slate-12 truncate"><%= display_name %></span>
@@ -54,9 +50,6 @@
     <% if channel_type.present? %>data-channel-type="<%= channel_type %>"<% end %>
   >
     <div class="flex items-center gap-3 min-w-0">
-      <span class="flex items-center justify-center w-9 h-9 shrink-0 rounded-lg bg-n-alpha-2 text-n-slate-11">
-        <svg width="16" height="16"><use xlink:href="#<%= icon %>" /></svg>
-      </span>
       <div class="min-w-0">
         <div class="flex items-center gap-2">
           <span class="text-sm font-medium text-n-slate-12 truncate"><%= display_name %></span>

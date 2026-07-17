@@ -10,6 +10,13 @@
 <div class="<%= editable ? 'field-unit__field feature-container' : 'w-full' %>" data-account-features>
   <div class="rounded-2xl border border-n-container bg-n-solid-2 shadow-soft overflow-hidden">
     <div class="border-b border-n-weak px-5 py-4 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-n-solid-blue text-n-blue-text shrink-0">
+          <svg width="16" height="16"><use xlink:href="#icon-apps-2-line" /></svg>
+        </span>
+        <h3 class="text-sm font-semibold text-n-slate-12 m-0">Account Features</h3>
+      </div>
+
       <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
         <div class="relative flex-1">
           <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-n-slate-9">
@@ -69,7 +76,6 @@
             </button>
             <% channel_group[:subgroups].each do |subgroup| %>
               <button type="button" data-channel-type="<%= subgroup[:key] %>" class="reset-base feature-chip" onclick="selectChannelType(event)">
-                <svg width="14" height="14"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
                 <%= subgroup[:label] %>
               </button>
             <% end %>
@@ -107,12 +113,7 @@
                 <div data-feature-subgroup="<%= subgroup[:key] %>">
                   <div class="flex items-center justify-between gap-3 mb-3">
                     <div class="flex items-center gap-2.5 min-w-0">
-                      <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-n-alpha-2 text-n-slate-11 shrink-0">
-                        <svg width="14" height="14"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
-                      </span>
-                      <div class="min-w-0">
-                        <h5 class="text-xs font-semibold text-n-slate-11 uppercase tracking-wide m-0"><%= subgroup[:label] %></h5>
-                      </div>
+                      <h5 class="text-xs font-semibold text-n-slate-11 uppercase tracking-wide m-0"><%= subgroup[:label] %></h5>
                     </div>
                     <% if editable %>
                       <div class="inline-flex items-center rounded-lg outline outline-1 outline-n-weak overflow-hidden shrink-0">
