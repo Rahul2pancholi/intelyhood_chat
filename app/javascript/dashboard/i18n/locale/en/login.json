@@ -18,7 +18,8 @@
     "OAUTH": {
       "GOOGLE_LOGIN": "Login with Google",
       "BUSINESS_ACCOUNTS_ONLY": "Please use your company email address to login",
-      "NO_ACCOUNT_FOUND": "We couldn't find an account for your email address."
+      "NO_ACCOUNT_FOUND": "We couldn't find an account for your email address.",
+      "FAILED": "Google sign-in failed. Please try again, or log in with your email and password."
     },
     "FORGOT_PASSWORD": "Forgot your password?",
     "CREATE_NEW_ACCOUNT": "Create a new account",

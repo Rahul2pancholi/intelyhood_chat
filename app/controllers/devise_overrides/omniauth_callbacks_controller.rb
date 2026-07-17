@@ -3,11 +3,24 @@ class DeviseOverrides::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCa
 
   def omniauth_success
     get_resource_from_auth_hash
+    return redirect_to_login_with_oauth_error if auth_hash.blank?
 
     @resource.present? ? sign_in_user : sign_up_user
+  rescue StandardError => e
+    Rails.logger.error("[OAUTH] omniauth_success failed: #{e.class}: #{e.message}")
+    redirect_to_login_with_oauth_error
+  end
+
+  def omniauth_failure
+    Rails.logger.error("[OAUTH] omniauth_failure: #{params[:message]}")
+    redirect_to_login_with_oauth_error
   end
 
   private
+
+  def redirect_to_login_with_oauth_error
+    redirect_to login_page_url(error: 'omniauth-failed'), allow_other_host: true
+  end
 
   def sign_in_user
     # Capture before skip_confirmation! sets confirmed_at, which would
@@ -21,7 +34,8 @@ class DeviseOverrides::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCa
     # we can just send them to the login page again with the SSO params
     # that will log them in
     encoded_email = ERB::Util.url_encode(@resource.email)
-    redirect_to login_page_url(email: encoded_email, sso_auth_token: @resource.generate_sso_auth_token)
+    redirect_to login_page_url(email: encoded_email, sso_auth_token: @resource.generate_sso_auth_token),
+                allow_other_host: true
   end
 
   def sign_in_user_on_mobile
@@ -41,22 +55,31 @@ class DeviseOverrides::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCa
   end
 
   def sign_up_user
-    return redirect_to login_page_url(error: 'no-account-found') unless account_signup_allowed?
-    return redirect_to login_page_url(error: 'business-account-only') unless validate_signup_email_is_business_domain?
+    return redirect_to login_page_url(error: 'no-account-found'), allow_other_host: true unless account_signup_allowed?
+
+    unless validate_signup_email_is_business_domain?
+      return redirect_to login_page_url(error: 'business-account-only'),
+                         allow_other_host: true
+    end
 
     create_account_for_user
     set_random_password_if_oauth_user
     token = @resource.send(:set_reset_password_token)
-    frontend_url = ENV.fetch('FRONTEND_URL', nil)
-    redirect_to "#{frontend_url}/app/auth/password/edit?config=default&reset_password_token=#{token}"
+    redirect_to "#{frontend_base_url}/app/auth/password/edit?config=default&reset_password_token=#{token}",
+                allow_other_host: true
   end
 
   def login_page_url(error: nil, email: nil, sso_auth_token: nil)
-    frontend_url = ENV.fetch('FRONTEND_URL', nil)
     params = { email: email, sso_auth_token: sso_auth_token }.compact
     params[:error] = error if error.present?
 
-    "#{frontend_url}/app/login?#{params.to_query}"
+    "#{frontend_base_url}/app/login?#{params.to_query}"
+  end
+
+  # Prefer the host that handled the OAuth callback so local/dev redirects stay on
+  # the same origin even if FRONTEND_URL still points at a tunnel/remote URL.
+  def frontend_base_url
+    request.base_url.presence || ENV.fetch('FRONTEND_URL', nil)
   end
 
   def account_signup_allowed?
@@ -68,6 +91,8 @@ class DeviseOverrides::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCa
   end
 
   def get_resource_from_auth_hash # rubocop:disable Naming/AccessorMethodName
+    return if auth_hash.blank?
+
     email = auth_hash.dig('info', 'email')
     @resource = resource_class.from_email(email)
   end

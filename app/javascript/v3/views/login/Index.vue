@@ -24,6 +24,7 @@ import SessionLimitOverlay from 'dashboard/components/auth/SessionLimitOverlay.v
 const ERROR_MESSAGES = {
   'no-account-found': 'LOGIN.OAUTH.NO_ACCOUNT_FOUND',
   'business-account-only': 'LOGIN.OAUTH.BUSINESS_ACCOUNTS_ONLY',
+  'omniauth-failed': 'LOGIN.OAUTH.FAILED',
   'saml-authentication-failed': 'LOGIN.SAML.API.ERROR_MESSAGE',
   'saml-not-enabled': 'LOGIN.SAML.API.ERROR_MESSAGE',
 };
@@ -111,18 +112,25 @@ export default {
     if (this.ssoAuthToken) {
       this.submitLogin();
     }
-    if (this.authError) {
-      const messageKey = ERROR_MESSAGES[this.authError] ?? 'LOGIN.API.UNAUTH';
-      // Use a method to get the translated text to avoid dynamic key warning
-      const translatedMessage = this.getTranslatedMessage(messageKey);
+  },
+  mounted() {
+    if (!this.authError) {
+      return;
+    }
+
+    const messageKey = ERROR_MESSAGES[this.authError] ?? 'LOGIN.API.UNAUTH';
+    const translatedMessage = this.getTranslatedMessage(messageKey);
+
+    // Inline error stays visible; toast needs Snackbar mounted first.
+    this.loginApi.hasErrored = true;
+    this.loginApi.message = translatedMessage;
+    this.$nextTick(() => {
       useAlert(translatedMessage);
-      // wait for idle state
       this.requestIdleCallbackPolyfill(() => {
-        // Remove the error query param from the url
         const { query } = this.$route;
         this.$router.replace({ query: { ...query, error: undefined } });
       });
-    }
+    });
   },
   methods: {
     getTranslatedMessage(key) {
@@ -132,6 +140,8 @@ export default {
           return this.$t('LOGIN.OAUTH.NO_ACCOUNT_FOUND');
         case 'LOGIN.OAUTH.BUSINESS_ACCOUNTS_ONLY':
           return this.$t('LOGIN.OAUTH.BUSINESS_ACCOUNTS_ONLY');
+        case 'LOGIN.OAUTH.FAILED':
+          return this.$t('LOGIN.OAUTH.FAILED');
         case 'LOGIN.API.UNAUTH':
         default:
           return this.$t('LOGIN.API.UNAUTH');
@@ -367,6 +377,13 @@ export default {
           />
         </div>
         <form class="space-y-5" @submit.prevent="submitFormLogin">
+          <div
+            v-if="loginApi.message"
+            class="rounded-md border border-n-ruby-6 bg-n-ruby-2 px-3 py-2 text-sm text-n-ruby-11"
+            role="alert"
+          >
+            {{ loginApi.message }}
+          </div>
           <FormInput
             v-model="credentials.email"
             name="email_address"
