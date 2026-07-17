@@ -17,20 +17,20 @@
     <% if channel_type.present? %>data-channel-type="<%= channel_type %>"<% end %>
   >
     <div class="flex items-center gap-3 min-w-0">
-      <span class="flex items-center justify-center w-10 h-10 shrink-0 rounded-xl border border-slate-200 text-slate-700 bg-slate-50">
-        <svg width="18" height="18"><use xlink:href="#<%= icon %>" /></svg>
+      <span class="flex items-center justify-center w-9 h-9 shrink-0 rounded-lg bg-n-alpha-2 text-n-slate-11">
+        <svg width="16" height="16"><use xlink:href="#<%= icon %>" /></svg>
       </span>
       <div class="min-w-0">
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-slate-800 truncate"><%= display_name %></span>
+          <span class="text-sm font-medium text-n-slate-12 truncate"><%= display_name %></span>
           <% if is_premium %>
-            <span class="shrink-0 inline-flex items-center px-1.5 h-5 rounded-md bg-amber-50 text-amber-700 text-xxs font-medium border border-amber-100">
+            <span class="shrink-0 inline-flex items-center px-1.5 h-5 rounded-md bg-n-solid-amber text-n-amber-text text-xxs font-medium">
               Premium
             </span>
           <% end %>
         </div>
         <% if channel_label.present? %>
-          <span class="text-xxs text-slate-500"><%= channel_label %></span>
+          <span class="text-xxs text-n-slate-10"><%= channel_label %></span>
         <% end %>
       </div>
     </div>
@@ -40,7 +40,7 @@
             checked: enabled,
             disabled: should_disable,
             id: checkbox_id,
-            class: "h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-600",
+            class: "h-4 w-4 rounded border-n-weak text-n-brand focus:ring-n-brand",
             onchange: "syncFeatureCardState(this)"
           }, true, false %>
     </span>
@@ -54,25 +54,25 @@
     <% if channel_type.present? %>data-channel-type="<%= channel_type %>"<% end %>
   >
     <div class="flex items-center gap-3 min-w-0">
-      <span class="flex items-center justify-center w-10 h-10 shrink-0 rounded-xl border border-slate-200 text-slate-700 bg-slate-50">
-        <svg width="18" height="18"><use xlink:href="#<%= icon %>" /></svg>
+      <span class="flex items-center justify-center w-9 h-9 shrink-0 rounded-lg bg-n-alpha-2 text-n-slate-11">
+        <svg width="16" height="16"><use xlink:href="#<%= icon %>" /></svg>
       </span>
       <div class="min-w-0">
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-slate-800 truncate"><%= display_name %></span>
+          <span class="text-sm font-medium text-n-slate-12 truncate"><%= display_name %></span>
           <% if is_premium %>
-            <span class="shrink-0 inline-flex items-center px-1.5 h-5 rounded-md bg-amber-50 text-amber-700 text-xxs font-medium border border-amber-100">
+            <span class="shrink-0 inline-flex items-center px-1.5 h-5 rounded-md bg-n-solid-amber text-n-amber-text text-xxs font-medium">
               Premium
             </span>
           <% end %>
         </div>
         <% if channel_label.present? %>
-          <span class="text-xxs text-slate-500"><%= channel_label %></span>
+          <span class="text-xxs text-n-slate-10"><%= channel_label %></span>
         <% end %>
       </div>
     </div>
 
-    <span class="<%= enabled.present? ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400' %> rounded-full p-1 inline-flex shrink-0">
+    <span class="<%= enabled.present? ? 'bg-n-teal-9 text-white' : 'bg-n-alpha-2 text-n-slate-9' %> rounded-full p-1 inline-flex shrink-0">
       <svg width="12" height="12"><use xlink:href="#icon-tick-line" /></svg>
     </span>
   </div>

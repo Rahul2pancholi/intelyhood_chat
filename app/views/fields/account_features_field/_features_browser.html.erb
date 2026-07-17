@@ -8,11 +8,11 @@
 <%= javascript_include_tag 'accountFeaturesFilter' %>
 
 <div class="<%= editable ? 'field-unit__field feature-container' : 'w-full' %>" data-account-features>
-  <div class="rounded-xl border border-slate-200 bg-white overflow-hidden">
-    <div class="border-b border-slate-200 bg-slate-50 px-4 py-4 space-y-4">
+  <div class="rounded-2xl border border-n-container bg-n-solid-2 shadow-soft overflow-hidden">
+    <div class="border-b border-n-weak px-5 py-4 space-y-4">
       <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
         <div class="relative flex-1">
-          <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+          <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-n-slate-9">
             <svg width="16" height="16"><use xlink:href="#icon-menu-search-line" /></svg>
           </span>
           <input
@@ -20,7 +20,7 @@
             data-feature-search
             oninput="filterAccountFeatures(event)"
             placeholder="Search by feature name..."
-            class="w-full h-11 pl-10 pr-3 text-sm bg-white border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500"
+            class="w-full h-11 pl-10 pr-3 text-sm bg-n-alpha-black2 border-none outline outline-1 outline-n-weak rounded-xl focus:outline-n-brand"
           />
         </div>
 
@@ -28,14 +28,14 @@
           <div class="flex shrink-0 gap-2">
             <button
               type="button"
-              class="h-11 px-4 text-sm font-medium rounded-xl border border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100"
+              class="h-11 px-4 text-sm font-medium rounded-xl bg-n-solid-blue text-n-blue-text hover:opacity-90"
               onclick="toggleVisibleFeatures(event, true)"
             >
               Select all
             </button>
             <button
               type="button"
-              class="h-11 px-4 text-sm font-medium rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+              class="h-11 px-4 text-sm font-medium rounded-xl outline outline-1 outline-n-weak bg-n-solid-2 text-n-slate-11 hover:bg-n-alpha-2"
               onclick="toggleVisibleFeatures(event, false)"
             >
               Deselect all
@@ -45,7 +45,7 @@
       </div>
 
       <div>
-        <p class="text-xxs uppercase tracking-wide text-slate-400 font-semibold m-0 mb-2">Category</p>
+        <p class="text-xxs uppercase tracking-wide text-n-slate-9 font-semibold m-0 mb-2">Category</p>
         <div class="flex flex-wrap gap-2">
           <button type="button" data-feature-category="all" class="feature-chip is-active" onclick="selectFeatureCategory(event)">
             All
@@ -62,7 +62,7 @@
       <% channel_group = grouped_features.find { |group| group[:key] == :channels } %>
       <% if channel_group.present? && channel_group[:subgroups].present? %>
         <div data-channel-filters>
-          <p class="text-xxs uppercase tracking-wide text-slate-400 font-semibold m-0 mb-2">Channel type</p>
+          <p class="text-xxs uppercase tracking-wide text-n-slate-9 font-semibold m-0 mb-2">Channel type</p>
           <div class="flex flex-wrap gap-2">
             <button type="button" data-channel-type="all" class="feature-chip is-active" onclick="selectChannelType(event)">
               All channels
@@ -78,48 +78,47 @@
       <% end %>
 
       <% if editable %>
-        <p class="text-xs text-slate-500 m-0">
+        <p class="text-xs text-n-slate-10 m-0">
           Select all / Deselect all only affects currently visible features.
         </p>
       <% end %>
     </div>
 
-    <div class="p-4 space-y-6">
+    <div class="p-5 space-y-7">
       <% grouped_features.each do |group| %>
         <section data-feature-group="<%= group[:key] %>" class="space-y-3">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <h4 class="text-sm font-semibold text-slate-800 m-0"><%= group[:label] %></h4>
-              <p class="text-xs text-slate-500 m-0 mt-1"><%= group[:description] %></p>
+              <h4 class="text-sm font-semibold text-n-slate-12 m-0"><%= group[:label] %></h4>
+              <p class="text-xs text-n-slate-10 m-0 mt-1"><%= group[:description] %></p>
             </div>
             <% if editable %>
-              <div class="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 overflow-hidden shrink-0">
-                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-violet-700 hover:bg-violet-50" onclick="toggleSectionFeatures(event, true)">Select</button>
-                <span class="w-px self-stretch bg-slate-200"></span>
-                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-slate-500 hover:bg-slate-100" onclick="toggleSectionFeatures(event, false)">Clear</button>
+              <div class="inline-flex items-center rounded-lg outline outline-1 outline-n-weak overflow-hidden shrink-0">
+                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-n-blue-text hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, true)">Select</button>
+                <span class="w-px self-stretch bg-n-weak"></span>
+                <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-n-slate-10 hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, false)">Clear</button>
               </div>
             <% end %>
           </div>
 
           <% if group[:subgroups].present? %>
-            <div class="space-y-4">
+            <div class="space-y-5">
               <% group[:subgroups].each do |subgroup| %>
-                <div data-feature-subgroup="<%= subgroup[:key] %>" class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div data-feature-subgroup="<%= subgroup[:key] %>">
                   <div class="flex items-center justify-between gap-3 mb-3">
                     <div class="flex items-center gap-2.5 min-w-0">
-                      <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 shrink-0">
-                        <svg width="16" height="16"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
+                      <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-n-alpha-2 text-n-slate-11 shrink-0">
+                        <svg width="14" height="14"><use xlink:href="#<%= subgroup[:icon] %>" /></svg>
                       </span>
                       <div class="min-w-0">
-                        <h5 class="text-sm font-semibold text-slate-800 m-0"><%= subgroup[:label] %></h5>
-                        <p class="text-xxs text-slate-500 m-0 truncate"><%= subgroup[:description] %></p>
+                        <h5 class="text-xs font-semibold text-n-slate-11 uppercase tracking-wide m-0"><%= subgroup[:label] %></h5>
                       </div>
                     </div>
                     <% if editable %>
-                      <div class="inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden shrink-0">
-                        <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-violet-700 hover:bg-violet-50" onclick="toggleSectionFeatures(event, true)">Select</button>
-                        <span class="w-px self-stretch bg-slate-200"></span>
-                        <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-slate-500 hover:bg-slate-100" onclick="toggleSectionFeatures(event, false)">Clear</button>
+                      <div class="inline-flex items-center rounded-lg outline outline-1 outline-n-weak overflow-hidden shrink-0">
+                        <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-n-blue-text hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, true)">Select</button>
+                        <span class="w-px self-stretch bg-n-weak"></span>
+                        <button type="button" class="px-2.5 py-1.5 text-xxs font-medium text-n-slate-10 hover:bg-n-alpha-2" onclick="toggleSectionFeatures(event, false)">Clear</button>
                       </div>
                     <% end %>
                   </div>
@@ -160,7 +159,7 @@
         </section>
       <% end %>
 
-      <p data-feature-empty class="hidden text-sm text-slate-500 text-center py-8 m-0">
+      <p data-feature-empty class="hidden text-sm text-n-slate-10 text-center py-8 m-0">
         No features match your search.
       </p>
     </div>
