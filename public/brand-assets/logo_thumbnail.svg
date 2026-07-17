@@ -1,11 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="16" height="16">
-  <!-- app tile -->
-  <rect x="8" y="8" width="224" height="224" rx="52" fill="#4F46E5"/>
-  <!-- single flat white chat bubble with playful tail -->
-  <path d="M76 62 h88 a34 34 0 0 1 34 34 v40 a34 34 0 0 1 -34 34 h-44 l-30 26 c-5 4.5 -13 1 -12.5 -6 l1.5 -20 a34 34 0 0 1 -37 -34 v-40 a34 34 0 0 1 34 -34 z"
-        fill="#FFFFFF"/>
-  <!-- three dots, single accent color -->
-  <circle cx="98" cy="118" r="10" fill="#4F46E5"/>
-  <circle cx="126" cy="118" r="10" fill="#4F46E5"/>
-  <circle cx="154" cy="118" r="10" fill="#4F46E5"/>
+  <defs>
+    <mask id="cutA">
+      <rect width="240" height="240" fill="#fff"/>
+      <path d="M104 92 h48 a19 19 0 0 1 19 19 v66 l-66 0 a19 19 0 0 1 -19 -19 v-47 a19 19 0 0 1 19 -19 z" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="240" height="240" rx="52" fill="#4F46E5"/>
+  <circle cx="120" cy="120" r="86" fill="#FFFFFF" mask="url(#cutA)"/>
 </svg>
