@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 200" width="2559" height="581">
-  <!-- flat indigo bubble, no tile -->
-  <g transform="translate(18 18) scale(0.72)">
-    <path d="M60 20 h110 a44 44 0 0 1 44 44 v56 a44 44 0 0 1 -44 44 h-56 l-38 33 c-6.5 5.5 -16.5 1 -15.8 -7.5 l2 -25.5 a44 44 0 0 1 -46.2 -44 v-56 a44 44 0 0 1 44 -44 z"
-          fill="#4F46E5"/>
-    <circle cx="88" cy="94" r="12" fill="#FFFFFF"/>
-    <circle cx="122" cy="94" r="12" fill="#FFFFFF"/>
-    <circle cx="156" cy="94" r="12" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="2559" height="581">
+  <defs>
+    <mask id="cut">
+      <rect width="240" height="240" fill="#fff"/>
+      <path d="M100 84 h56 a22 22 0 0 1 22 22 v78 l-78 -0 a22 22 0 0 1 -22 -22 v-56 a22 22 0 0 1 22 -22 z" fill="#000"/>
+    </mask>
+  </defs>
+  <g transform="translate(20 30) scale(0.58)">
+    <circle cx="120" cy="120" r="100" fill="#FFFFFF" mask="url(#cut)"/>
   </g>
-  <!-- lowercase rounded wordmark, single color, white for dark backgrounds -->
-  <text x="210" y="130" font-family="'Nunito','Varela Round','Segoe UI',system-ui,sans-serif"
-        font-size="84" font-weight="800" fill="#FFFFFF" letter-spacing="-2">intelychat</text>
+  <text x="180" y="138" font-family="'Inter','Helvetica Neue','Segoe UI',system-ui,sans-serif"
+        font-size="86" font-weight="700" fill="#FFFFFF" letter-spacing="-3">intelychat</text>
 </svg>

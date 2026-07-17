@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <mask id="cut">
+      <rect width="240" height="240" fill="#fff"/>
+      <!-- cutout: rounded square, bottom-right corner sharp and extended to circle edge = bubble tail -->
+      <path d="M100 84 h56 a22 22 0 0 1 22 22 v78 l-78 -0 a22 22 0 0 1 -22 -22 v-56 a22 22 0 0 1 22 -22 z" fill="#000"/>
+    </mask>
+  </defs>
+  <circle cx="120" cy="120" r="100" fill="#FFFFFF" mask="url(#cut)"/>
+</svg>
