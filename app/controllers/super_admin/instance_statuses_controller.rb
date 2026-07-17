@@ -11,12 +11,12 @@ class SuperAdmin::InstanceStatusesController < SuperAdmin::ApplicationController
 
   def intelychat_edition
     @metrics['Intelychat edition'] = if IntelychatApp.enterprise?
-                                     'Enterprise'
-                                   elsif IntelychatApp.custom?
-                                     'Custom'
-                                   else
-                                     'Community'
-                                   end
+                                       'Enterprise'
+                                     elsif IntelychatApp.custom?
+                                       'Custom'
+                                     else
+                                       'Community'
+                                     end
   end
 
   def instance_meta
