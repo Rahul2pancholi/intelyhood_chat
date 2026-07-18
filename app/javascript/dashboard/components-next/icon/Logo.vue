@@ -22,21 +22,10 @@ const globalConfig = useMapGetter('globalConfig/get');
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <defs>
-      <mask id="intelychat-logo-mark-cut">
-        <rect width="240" height="240" fill="#fff" />
-        <path
-          d="M100 84 h56 a22 22 0 0 1 22 22 v78 l-78 -0 a22 22 0 0 1 -22 -22 v-56 a22 22 0 0 1 22 -22 z"
-          fill="#000"
-        />
-      </mask>
-    </defs>
-    <circle
-      cx="120"
-      cy="120"
-      r="100"
-      fill="#4F46E5"
-      mask="url(#intelychat-logo-mark-cut)"
+    <path
+      fill-rule="evenodd"
+      fill="#3B8CFF"
+      d="M120 20 A100 100 0 1 1 120 220 A100 100 0 1 1 120 20 Z M100 84 H156 A22 22 0 0 1 178 106 V184 L100 184 A22 22 0 0 1 78 162 V106 A22 22 0 0 1 100 84 Z"
     />
   </svg>
 </template>

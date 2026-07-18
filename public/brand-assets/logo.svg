@@ -1,13 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="2559" height="581">
-  <defs>
-    <mask id="cut">
-      <rect width="240" height="240" fill="#fff"/>
-      <path d="M100 84 h56 a22 22 0 0 1 22 22 v78 l-78 -0 a22 22 0 0 1 -22 -22 v-56 a22 22 0 0 1 22 -22 z" fill="#000"/>
-    </mask>
-  </defs>
-  <g transform="translate(20 30) scale(0.58)">
-    <circle cx="120" cy="120" r="100" fill="#4F46E5" mask="url(#cut)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 90" width="360" height="90">
+  <g transform="translate(6,5) scale(0.32)">
+    <path fill-rule="evenodd" fill="#3B8CFF" d="M120 20 A100 100 0 1 1 120 220 A100 100 0 1 1 120 20 Z M100 84 H156 A22 22 0 0 1 178 106 V184 L100 184 A22 22 0 0 1 78 162 V106 A22 22 0 0 1 100 84 Z"/>
   </g>
-  <text x="180" y="138" font-family="'Inter','Helvetica Neue','Segoe UI',system-ui,sans-serif"
-        font-size="86" font-weight="700" fill="#1E1B4B" letter-spacing="-3">intelychat</text>
+  <g transform="translate(96,20)"><text x="0" y="30" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="34" letter-spacing="-0.3"><tspan fill="#1a1a1a">Intely</tspan><tspan fill="#3B8CFF">Chat</tspan></text></g>
 </svg>

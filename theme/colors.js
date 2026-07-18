@@ -228,8 +228,8 @@ export const colors = {
     },
 
     black: '#000000',
-    brand: '#4F46E5',
-    'brand-dark': '#1E1B4B',
+    brand: '#0561E2',
+    'brand-dark': '#043D8F',
     portal: 'var(--dynamic-portal-color)',
     'portal-soft': 'var(--dynamic-portal-color-soft)',
     'portal-faint': 'var(--dynamic-portal-color-faint)',
