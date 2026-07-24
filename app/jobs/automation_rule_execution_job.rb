@@ -14,8 +14,8 @@ class AutomationRuleExecutionJob < ApplicationJob
     end
 
     AdministratorNotifications::AccountNotificationMailer.with(account: account)
-                                                          .automation_rule_run_complete(rule, matched_count, user.email)
-                                                          &.deliver_later
+                                                         .automation_rule_run_complete(rule, matched_count, user.email)
+                                                         &.deliver_later
   ensure
     rule.mark_run_complete!
   end
