@@ -5,7 +5,7 @@ class SeedDefaultPlans < ActiveRecord::Migration[7.1]
   PRO_FEATURES = %w[disable_branding custom_roles advanced_assignment companies csat_review_notes
                     conversation_required_attributes].freeze
   ENTERPRISE_FEATURES = (PRO_FEATURES + %w[audit_logs custom_tools sla captain_integration channel_voice
-                                            captain_integration_v2 captain_document_auto_sync advanced_search saml]).freeze
+                                           captain_integration_v2 captain_document_auto_sync advanced_search saml]).freeze
 
   PLANS = [
     { slug: 'free', name: 'Free', price_cents: 0, max_agents: 2, max_inboxes: 1,
@@ -25,6 +25,7 @@ class SeedDefaultPlans < ActiveRecord::Migration[7.1]
   end
 
   def down
-    Plan.where(slug: PLANS.pluck(:slug)).destroy_all
+    slugs = PLANS.pluck(:slug)
+    Plan.where(slug: slugs).destroy_all
   end
 end

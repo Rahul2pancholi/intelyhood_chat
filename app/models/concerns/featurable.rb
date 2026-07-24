@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ModuleLength
 module Featurable
   extend ActiveSupport::Concern
 
@@ -153,3 +154,4 @@ module Featurable
     enable_features(*features_to_enabled)
   end
 end
+# rubocop:enable Metrics/ModuleLength

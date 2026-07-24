@@ -17,7 +17,7 @@ class Billing::CheckoutSessionService
     )
 
     subscription.update!(plan: plan, razorpay_subscription_id: razorpay_subscription.id,
-                          razorpay_short_url: razorpay_subscription.short_url)
+                         razorpay_short_url: razorpay_subscription.short_url)
     razorpay_subscription
   end
 
