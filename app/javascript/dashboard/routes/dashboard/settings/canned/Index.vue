@@ -144,6 +144,7 @@ const tableHeaders = computed(() => {
     :loading-message="$t('CANNED_MGMT.LOADING')"
     :no-records-found="!records.length"
     :no-records-message="$t('CANNED_MGMT.LIST.404')"
+    empty-state-icon="i-lucide-message-square-quote"
   >
     <template #header>
       <BaseSettingsHeader
@@ -152,6 +153,7 @@ const tableHeaders = computed(() => {
         :description="$t('CANNED_MGMT.DESCRIPTION')"
         :link-text="$t('CANNED_MGMT.LEARN_MORE')"
         :search-placeholder="$t('CANNED_MGMT.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-message-square-quote"
         feature-name="canned_responses"
       >
         <template v-if="records?.length" #count>
@@ -211,13 +213,20 @@ const tableHeaders = computed(() => {
           >
             <template #default>
               <BaseTableCell class="max-w-0">
-                <div class="flex flex-col gap-2 min-w-0">
-                  <span class="text-heading-3 text-n-slate-12 truncate block">
-                    {{ cannedItem.short_code }}
+                <div class="flex items-start gap-3 min-w-0">
+                  <span
+                    class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0 mt-0.5"
+                  >
+                    <Icon icon="i-lucide-message-square-quote" class="size-4" />
                   </span>
-                  <p class="text-body-main text-n-slate-11 line-clamp-5">
-                    {{ getPlainText(cannedItem.content) }}
-                  </p>
+                  <div class="flex flex-col gap-2 min-w-0">
+                    <span class="text-heading-3 text-n-slate-12 truncate block">
+                      /{{ cannedItem.short_code }}
+                    </span>
+                    <p class="text-body-main text-n-slate-11 line-clamp-5">
+                      {{ getPlainText(cannedItem.content) }}
+                    </p>
+                  </div>
                 </div>
               </BaseTableCell>
 

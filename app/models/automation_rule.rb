@@ -46,6 +46,22 @@ class AutomationRule < ApplicationRecord
        add_private_note].freeze
   end
 
+  def running?
+    Redis::Alfred.exists?(running_redis_key)
+  end
+
+  def mark_running!
+    Redis::Alfred.set(running_redis_key, true, ex: 1.hour.to_i)
+  end
+
+  def mark_run_complete!
+    Redis::Alfred.delete(running_redis_key)
+  end
+
+  def running_redis_key
+    format(Redis::RedisKeys::AUTOMATION_RULE_RUNNING_KEY, id: id)
+  end
+
   def file_base_data
     files.map do |file|
       {

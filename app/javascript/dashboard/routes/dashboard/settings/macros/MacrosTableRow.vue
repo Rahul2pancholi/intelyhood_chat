@@ -4,6 +4,7 @@ import Avatar from 'next/avatar/Avatar.vue';
 import { useI18n } from 'vue-i18n';
 
 import Button from 'dashboard/components-next/button/Button.vue';
+import Icon from 'dashboard/components-next/icon/Icon.vue';
 import { BaseTableRow, BaseTableCell } from 'dashboard/components-next/table';
 
 const props = defineProps({
@@ -50,9 +51,16 @@ const editTooltip = computed(() =>
   <BaseTableRow :item="macro">
     <template #default>
       <BaseTableCell class="max-w-0 min-w-0">
-        <span class="text-body-main text-n-slate-12 truncate block">
-          {{ macro.name }}
-        </span>
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span
+            class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0"
+          >
+            <Icon icon="i-lucide-toy-brick" class="size-4" />
+          </span>
+          <span class="text-body-main text-n-slate-12 truncate block">
+            {{ macro.name }}
+          </span>
+        </div>
       </BaseTableCell>
 
       <BaseTableCell class="max-w-0">

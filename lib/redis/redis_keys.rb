@@ -103,4 +103,8 @@ module Redis::RedisKeys
 
   ## Account Email Rate Limiting
   ACCOUNT_OUTBOUND_EMAIL_COUNT_KEY = 'OUTBOUND_EMAIL_COUNT::%<account_id>d::%<date>s'.freeze
+
+  ## Automation Rule Keys
+  # Marks an automation rule's backfill run on existing conversations as in-flight
+  AUTOMATION_RULE_RUNNING_KEY = 'AUTOMATION_RULE::%<id>d::RUNNING'.freeze
 end

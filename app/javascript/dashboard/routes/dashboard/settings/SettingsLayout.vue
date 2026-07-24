@@ -1,4 +1,6 @@
 <script setup>
+import Icon from 'dashboard/components-next/icon/Icon.vue';
+
 defineProps({
   isLoading: {
     type: Boolean,
@@ -16,6 +18,10 @@ defineProps({
     type: String,
     default: '',
   },
+  emptyStateIcon: {
+    type: String,
+    default: 'i-lucide-inbox',
+  },
 });
 </script>
 
@@ -28,12 +34,19 @@ defineProps({
       <slot v-if="isLoading" name="loading">
         <woot-loading-state :message="loadingMessage" />
       </slot>
-      <p
+      <div
         v-else-if="noRecordsFound"
-        class="flex-1 py-20 text-n-slate-12 flex items-center justify-center text-base"
+        class="flex flex-1 flex-col items-center justify-center gap-3 py-16"
       >
-        {{ noRecordsMessage }}
-      </p>
+        <span
+          class="inline-flex items-center justify-center size-9 rounded-xl bg-n-alpha-2 text-n-slate-10 flex-shrink-0"
+        >
+          <Icon :icon="emptyStateIcon" class="size-5" />
+        </span>
+        <p class="text-n-slate-12 text-base text-center px-4">
+          {{ noRecordsMessage }}
+        </p>
+      </div>
       <slot v-else name="body" />
       <!-- Do not delete the slot below. It is required to render anything that is not defined in the above slots. -->
       <slot />

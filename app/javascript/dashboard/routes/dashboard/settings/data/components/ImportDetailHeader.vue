@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Button from 'dashboard/components-next/button/Button.vue';
+import Icon from 'dashboard/components-next/icon/Icon.vue';
 import BaseSettingsHeader from '../../components/BaseSettingsHeader.vue';
 import {
   POLL_INTERVAL_MS,
@@ -71,13 +72,21 @@ const canAbandonImport = computed(() => isAbandonableImport(props.dataImport));
 <template>
   <BaseSettingsHeader
     :title="title"
+    icon="i-lucide-database"
     :back-button-label="$t('DATA_IMPORTS.DETAIL.BACK')"
   >
     <template #title>
       <div class="flex w-full items-center justify-between gap-4">
-        <h1 class="min-w-0 truncate text-heading-1 text-n-slate-12">
-          {{ title }}
-        </h1>
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span
+            class="inline-flex items-center justify-center size-9 rounded-xl bg-n-alpha-2 text-n-brand flex-shrink-0"
+          >
+            <Icon icon="i-lucide-database" class="size-5" />
+          </span>
+          <h1 class="min-w-0 truncate text-heading-1 text-n-slate-12">
+            {{ title }}
+          </h1>
+        </div>
         <div class="flex shrink-0 items-center gap-2">
           <Button
             v-if="hasActiveImport"

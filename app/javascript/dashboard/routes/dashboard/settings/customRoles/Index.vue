@@ -135,6 +135,7 @@ const confirmDeletion = () => {
     :loading-message="$t('CUSTOM_ROLE.LOADING')"
     :no-records-found="!records.length && !isBehindAPaywall"
     :no-records-message="$t('CUSTOM_ROLE.LIST.404')"
+    empty-state-icon="i-lucide-shield-plus"
   >
     <template #header>
       <BaseSettingsHeader
@@ -143,6 +144,7 @@ const confirmDeletion = () => {
         :description="$t('CUSTOM_ROLE.DESCRIPTION')"
         :link-text="$t('CUSTOM_ROLE.LEARN_MORE')"
         :search-placeholder="$t('CUSTOM_ROLE.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-shield-plus"
         feature-name="canned_responses"
       >
         <template v-if="records?.length" #count>

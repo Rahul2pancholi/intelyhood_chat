@@ -37,6 +37,7 @@ const showPaywall = computed(() => shouldShowPaywall('saml'));
         :title="$t('SECURITY_SETTINGS.TITLE')"
         :description="$t('SECURITY_SETTINGS.DESCRIPTION')"
         :link-text="$t('SECURITY_SETTINGS.LINK_TEXT')"
+        icon="i-lucide-shield"
         feature-name="saml"
       />
     </template>

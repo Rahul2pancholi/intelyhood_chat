@@ -77,6 +77,16 @@ export const actions = {
       commit(types.SET_AUTOMATION_UI_FLAG, { isCloning: false });
     }
   },
+  run: async ({ commit }, id) => {
+    commit(types.SET_AUTOMATION_UI_FLAG, { isRunning: true });
+    try {
+      await AutomationAPI.run(id);
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      commit(types.SET_AUTOMATION_UI_FLAG, { isRunning: false });
+    }
+  },
   uploadAttachment: async (_, file) => {
     const { blobId } = await uploadFile(file);
     return blobId;

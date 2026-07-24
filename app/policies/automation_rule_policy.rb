@@ -19,6 +19,10 @@ class AutomationRulePolicy < ApplicationPolicy
     @account_user.administrator?
   end
 
+  def run?
+    @account_user.administrator?
+  end
+
   def destroy?
     @account_user.administrator?
   end

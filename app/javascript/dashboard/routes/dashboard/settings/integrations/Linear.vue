@@ -41,6 +41,7 @@ onMounted(() => {
       <BaseSettingsHeader
         :title="$t('INTEGRATION_SETTINGS.LINEAR.HEADER')"
         description=""
+        icon="i-lucide-blocks"
         feature-name="linear_integration"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       />

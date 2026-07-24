@@ -1,6 +1,7 @@
 <script setup>
 import { BaseTableRow, BaseTableCell } from 'dashboard/components-next/table';
 import Button from 'dashboard/components-next/button/Button.vue';
+import Icon from 'dashboard/components-next/icon/Icon.vue';
 
 defineProps({
   app: {
@@ -16,12 +17,19 @@ defineEmits(['edit', 'delete']);
   <BaseTableRow :item="app">
     <template #default>
       <BaseTableCell>
-        <span
-          class="text-body-main text-n-slate-12 truncate block"
-          :title="app.title"
-        >
-          {{ app.title }}
-        </span>
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span
+            class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0"
+          >
+            <Icon icon="i-lucide-layout-dashboard" class="size-4" />
+          </span>
+          <span
+            class="text-body-main text-n-slate-12 truncate block"
+            :title="app.title"
+          >
+            {{ app.title }}
+          </span>
+        </div>
       </BaseTableCell>
 
       <BaseTableCell>

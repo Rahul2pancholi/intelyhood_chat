@@ -58,7 +58,24 @@ class AdministratorNotifications::AccountNotificationMailer < AdministratorNotif
     send_notification(subject, action_url: action_url, meta: meta)
   end
 
+  def automation_rule_run_complete(rule, matched_count, email_to)
+    subject = "Automation rule \"#{rule.name}\" finished running on existing conversations"
+    action_url = automation_rule_run_action_url(rule)
+    meta = { 'rule_name' => rule.name, 'matched_count' => matched_count }
+
+    send_notification(subject, to: email_to, action_url: action_url, meta: meta)
+  end
+
   private
+
+  def automation_rule_run_action_url(rule)
+    label_action = rule.actions.find { |action| action['action_name'] == 'add_label' }
+    label = label_action && label_action['action_params']&.first
+
+    return "#{ENV.fetch('FRONTEND_URL', nil)}/app/accounts/#{Current.account.id}/label/#{label}" if label.present?
+
+    settings_url('automation/list')
+  end
 
   def format_deletion_date(deletion_date_str)
     return 'Unknown' if deletion_date_str.blank?

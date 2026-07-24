@@ -82,6 +82,14 @@
         "ERROR_MESSAGE": "Could not clone automation rule, Please try again later"
       }
     },
+    "RUN": {
+      "TOOLTIP": "Run on existing conversations",
+      "RUNNING_LABEL": "Running…",
+      "API": {
+        "SUCCESS_MESSAGE": "Running in the background. You'll get an email with the results once it's done",
+        "ERROR_MESSAGE": "Could not run automation rule, Please try again later"
+      }
+    },
     "FORM": {
       "EDIT": "Edit",
       "CREATE": "Create",

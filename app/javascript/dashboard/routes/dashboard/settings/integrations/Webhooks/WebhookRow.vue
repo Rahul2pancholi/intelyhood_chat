@@ -5,6 +5,7 @@ import ShowMore from 'dashboard/components/widgets/ShowMore.vue';
 import { useI18n } from 'vue-i18n';
 import { BaseTableRow, BaseTableCell } from 'dashboard/components-next/table';
 import Button from 'dashboard/components-next/button/Button.vue';
+import Icon from 'dashboard/components-next/icon/Icon.vue';
 
 const props = defineProps({
   webhook: {
@@ -38,22 +39,31 @@ const subscribedEvents = computed(() => {
   <BaseTableRow :item="webhook">
     <template #default>
       <BaseTableCell>
-        <div class="flex gap-2 font-medium break-words text-n-slate-12">
-          <template v-if="webhook.name">
-            {{ webhook.name }}
-            <span class="text-n-slate-11">
-              {{ webhook.url }}
-            </span>
-          </template>
-          <template v-else>
-            {{ webhook.url }}
-          </template>
-        </div>
-        <div class="block mt-1 text-sm text-n-slate-11">
-          <span class="font-medium">
-            {{ $t('INTEGRATION_SETTINGS.WEBHOOK.SUBSCRIBED_EVENTS') }}:
+        <div class="flex items-start gap-2.5 min-w-0">
+          <span
+            class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0"
+          >
+            <Icon icon="i-lucide-webhook" class="size-4" />
           </span>
-          <ShowMore :text="subscribedEvents" :limit="60" />
+          <div class="min-w-0">
+            <div class="flex gap-2 font-medium break-words text-n-slate-12">
+              <template v-if="webhook.name">
+                {{ webhook.name }}
+                <span class="text-n-slate-11">
+                  {{ webhook.url }}
+                </span>
+              </template>
+              <template v-else>
+                {{ webhook.url }}
+              </template>
+            </div>
+            <div class="block mt-1 text-sm text-n-slate-11">
+              <span class="font-medium">
+                {{ $t('INTEGRATION_SETTINGS.WEBHOOK.SUBSCRIBED_EVENTS') }}:
+              </span>
+              <ShowMore :text="subscribedEvents" :limit="60" />
+            </div>
+          </div>
         </div>
       </BaseTableCell>
 

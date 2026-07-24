@@ -121,6 +121,7 @@ export default {
       <BaseSettingsHeader
         :title="integration.name || ''"
         description=""
+        icon="i-lucide-blocks"
         :feature-name="integrationId"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       />

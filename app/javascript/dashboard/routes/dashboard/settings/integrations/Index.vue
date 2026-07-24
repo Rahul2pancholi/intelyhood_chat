@@ -43,6 +43,7 @@ onMounted(() => {
         "
         :link-text="$t('INTEGRATION_SETTINGS.LEARN_MORE')"
         :search-placeholder="$t('INTEGRATION_SETTINGS.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-blocks"
         feature-name="integrations"
       />
     </template>

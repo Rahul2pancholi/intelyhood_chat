@@ -86,12 +86,14 @@ const tableHeaders = computed(() => {
     :loading-message="$t('AUDIT_LOGS.LOADING')"
     :no-records-found="!records.length"
     :no-records-message="$t('AUDIT_LOGS.LIST.404')"
+    empty-state-icon="i-lucide-scroll-text"
   >
     <template #header>
       <BaseSettingsHeader
         :title="$t('AUDIT_LOGS.HEADER')"
         :description="$t('AUDIT_LOGS.DESCRIPTION')"
         :link-text="$t('AUDIT_LOGS.LEARN_MORE')"
+        icon="i-lucide-scroll-text"
         feature-name="audit_logs"
       />
     </template>

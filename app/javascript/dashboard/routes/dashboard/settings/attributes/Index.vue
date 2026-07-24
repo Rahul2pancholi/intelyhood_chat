@@ -172,6 +172,7 @@ const filteredAttributes = computed(() => {
         :description="$t('ATTRIBUTES_MGMT.DESCRIPTION')"
         :link-text="$t('ATTRIBUTES_MGMT.LEARN_MORE')"
         :search-placeholder="$t('ATTRIBUTES_MGMT.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-code"
         feature-name="custom_attributes"
       >
         <template v-if="attributes?.length" #count>

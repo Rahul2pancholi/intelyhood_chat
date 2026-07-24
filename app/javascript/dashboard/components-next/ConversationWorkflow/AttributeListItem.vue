@@ -37,12 +37,12 @@ const attributeIcon = computed(() => {
 <template>
   <div class="flex flex-col py-4 min-w-0">
     <div class="flex justify-between flex-row items-center gap-4 min-w-0">
-      <div class="flex items-center gap-4 min-w-0">
-        <div
-          class="flex items-center flex-shrink-0 size-10 justify-center rounded-xl outline outline-1 outline-n-weak -outline-offset-1"
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span
+          class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0"
         >
-          <Icon :icon="attributeIcon" class="size-4 text-n-slate-11" />
-        </div>
+          <Icon :icon="attributeIcon" class="size-4" />
+        </span>
         <div class="flex flex-col gap-1.5 items-start min-w-0 overflow-hidden">
           <div class="flex items-center gap-2 min-w-0">
             <h4 class="text-heading-3 truncate text-n-slate-12 min-w-0">

@@ -55,6 +55,7 @@ onMounted(() => {
       <BaseSettingsHeader
         :title="$t('INTEGRATION_SETTINGS.NOTION.HEADER')"
         description=""
+        icon="i-lucide-blocks"
         feature-name="notion_integration"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       />

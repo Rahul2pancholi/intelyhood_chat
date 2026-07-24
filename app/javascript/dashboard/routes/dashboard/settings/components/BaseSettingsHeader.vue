@@ -31,6 +31,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  icon: {
+    type: String,
+    default: '',
+  },
 });
 
 const slots = useSlots();
@@ -53,9 +57,17 @@ const helpURL = getHelpUrlForFeature(props.featureName);
       class="flex items-center justify-between w-full gap-4 min-h-8 mb-2"
     >
       <slot name="title">
-        <h1 class="text-heading-1 text-n-slate-12">
-          {{ title }}
-        </h1>
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span
+            v-if="icon"
+            class="inline-flex items-center justify-center size-9 rounded-xl bg-n-alpha-2 text-n-brand flex-shrink-0"
+          >
+            <Icon :icon="icon" class="size-5" />
+          </span>
+          <h1 class="text-heading-1 text-n-slate-12 truncate">
+            {{ title }}
+          </h1>
+        </div>
       </slot>
     </div>
     <div

@@ -4,7 +4,7 @@ import AddAutomationRule from './AddAutomationRule.vue';
 import EditAutomationRule from './EditAutomationRule.vue';
 import BaseSettingsHeader from '../components/BaseSettingsHeader.vue';
 import SettingsLayout from '../SettingsLayout.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStoreGetters, useStore } from 'dashboard/composables/store';
 import { picoSearch } from '@scmmishra/pico-search';
@@ -51,6 +51,26 @@ const deleteMessage = computed(() => ` ${selectedAutomation.value.name}?`);
 const isSLAEnabled = computed(() =>
   getters['accounts/isFeatureEnabledonAccount'].value(accountId.value, 'sla')
 );
+
+const hasRunningAutomation = computed(() =>
+  records.value.some(automation => automation.running)
+);
+
+let runningPollInterval = null;
+watch(hasRunningAutomation, isRunning => {
+  if (isRunning && !runningPollInterval) {
+    runningPollInterval = setInterval(() => {
+      store.dispatch('automations/get');
+    }, 5000);
+  } else if (!isRunning && runningPollInterval) {
+    clearInterval(runningPollInterval);
+    runningPollInterval = null;
+  }
+});
+
+onBeforeUnmount(() => {
+  if (runningPollInterval) clearInterval(runningPollInterval);
+});
 
 onMounted(() => {
   store.dispatch('inboxes/get');
@@ -112,6 +132,19 @@ const cloneAutomation = async ({ id }) => {
     useAlert(t('AUTOMATION.CLONE.API.ERROR_MESSAGE'));
   } finally {
     loading.value[selectedAutomation.value.id] = false;
+  }
+};
+
+const runAutomation = async ({ id }) => {
+  loading.value[id] = true;
+  try {
+    await store.dispatch('automations/run', id);
+    useAlert(t('AUTOMATION.RUN.API.SUCCESS_MESSAGE'));
+    store.dispatch('automations/get');
+  } catch (error) {
+    useAlert(t('AUTOMATION.RUN.API.ERROR_MESSAGE'));
+  } finally {
+    loading.value[id] = false;
   }
 };
 
@@ -187,6 +220,7 @@ const tableHeaders = computed(() => {
     :loading-message="$t('AUTOMATION.LOADING')"
     :no-records-found="!records.length"
     :no-records-message="$t('AUTOMATION.LIST.404')"
+    empty-state-icon="i-lucide-repeat"
   >
     <template #header>
       <BaseSettingsHeader
@@ -195,6 +229,7 @@ const tableHeaders = computed(() => {
         :description="$t('AUTOMATION.DESCRIPTION')"
         :link-text="$t('AUTOMATION.LEARN_MORE')"
         :search-placeholder="$t('AUTOMATION.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-repeat"
         feature-name="automation"
       >
         <template v-if="records?.length" #count>
@@ -226,6 +261,7 @@ const tableHeaders = computed(() => {
             :automation="automation"
             :loading="loading[automation.id]"
             @clone="cloneAutomation"
+            @run="runAutomation"
             @toggle="toggleAutomation"
             @edit="openEditPopup"
             @delete="openDeletePopup"

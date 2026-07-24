@@ -72,6 +72,7 @@ const tableHeaders = computed(() => {
 <template>
   <SettingsLayout
     :no-records-message="$t('MACROS.LIST.404')"
+    empty-state-icon="i-lucide-toy-brick"
     :no-records-found="!records.length"
     :is-loading="uiFlags.isFetching"
     :loading-message="$t('MACROS.LOADING')"
@@ -84,6 +85,7 @@ const tableHeaders = computed(() => {
         :description="$t('MACROS.DESCRIPTION')"
         :link-text="$t('MACROS.LEARN_MORE')"
         :search-placeholder="$t('MACROS.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-toy-brick"
         feature-name="macros"
       >
         <template v-if="records?.length" #count>

@@ -75,6 +75,7 @@ onMounted(fetchBillingDetails);
       <BaseSettingsHeader
         :title="$t('BILLING_SETTINGS.TITLE')"
         :description="$t('BILLING_SETTINGS.DESCRIPTION')"
+        icon="i-lucide-credit-card"
       />
     </template>
     <template #body>

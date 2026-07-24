@@ -13,7 +13,7 @@ const props = defineProps({
   // channel type) and fall back to the monochrome glyph otherwise.
   useBrandIcon: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 

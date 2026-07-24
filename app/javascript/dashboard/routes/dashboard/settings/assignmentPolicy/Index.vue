@@ -88,6 +88,7 @@ const handleClick = key => {
       <BaseSettingsHeader
         :title="$t('ASSIGNMENT_POLICY.INDEX.HEADER.TITLE')"
         :description="$t('ASSIGNMENT_POLICY.INDEX.HEADER.DESCRIPTION')"
+        icon="i-lucide-user-cog"
         feature-name="assignment-policy"
       />
     </template>

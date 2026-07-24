@@ -103,6 +103,7 @@ export default {
     :loading-message="$t('INTEGRATION_SETTINGS.DASHBOARD_APPS.LIST.LOADING')"
     :no-records-found="!records.length"
     :no-records-message="$t('INTEGRATION_SETTINGS.DASHBOARD_APPS.LIST.404')"
+    empty-state-icon="i-lucide-layout-dashboard"
   >
     <template #header>
       <BaseSettingsHeader
@@ -113,6 +114,7 @@ export default {
         :search-placeholder="
           $t('INTEGRATION_SETTINGS.DASHBOARD_APPS.SEARCH_PLACEHOLDER')
         "
+        icon="i-lucide-layout-dashboard"
         feature-name="dashboard_apps"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       >

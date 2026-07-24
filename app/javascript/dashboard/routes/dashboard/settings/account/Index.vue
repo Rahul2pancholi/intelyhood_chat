@@ -158,7 +158,10 @@ export default {
 
 <template>
   <div class="flex flex-col w-full max-w-2xl ltr:mr-auto rtl:ml-auto">
-    <BaseSettingsHeader :title="$t('GENERAL_SETTINGS.TITLE')" />
+    <BaseSettingsHeader
+      :title="$t('GENERAL_SETTINGS.TITLE')"
+      icon="i-lucide-briefcase"
+    />
     <div class="flex-grow flex-shrink min-w-0 mt-3">
       <SectionLayout
         :title="$t('GENERAL_SETTINGS.FORM.GENERAL_SECTION.TITLE')"

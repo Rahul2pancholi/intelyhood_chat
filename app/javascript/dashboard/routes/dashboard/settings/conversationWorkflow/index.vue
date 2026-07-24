@@ -34,6 +34,7 @@ const showRequiredAttributes = computed(() => {
       <BaseSettingsHeader
         :title="$t('CONVERSATION_WORKFLOW.INDEX.HEADER.TITLE')"
         :description="$t('CONVERSATION_WORKFLOW.INDEX.HEADER.DESCRIPTION')"
+        icon="i-lucide-workflow"
         feature-name="conversation-workflow"
       />
     </template>

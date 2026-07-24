@@ -189,6 +189,7 @@ onBeforeUnmount(() => {
       <BaseSettingsHeader
         :title="$t('DATA_IMPORTS.HEADER')"
         :description="$t('DATA_IMPORTS.DESCRIPTION')"
+        icon="i-lucide-database"
       >
         <template #tabs>
           <TabBar

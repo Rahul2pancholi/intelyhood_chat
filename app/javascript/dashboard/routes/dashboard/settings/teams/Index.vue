@@ -86,6 +86,7 @@ const confirmPlaceHolderText = computed(() =>
     :loading-message="$t('TEAMS_SETTINGS.LOADING')"
     :no-records-found="!teamsList.length"
     :no-records-message="$t('TEAMS_SETTINGS.LIST.404')"
+    empty-state-icon="i-lucide-users"
   >
     <template #header>
       <BaseSettingsHeader
@@ -94,6 +95,7 @@ const confirmPlaceHolderText = computed(() =>
         :description="$t('TEAMS_SETTINGS.DESCRIPTION')"
         :link-text="$t('TEAMS_SETTINGS.LEARN_MORE')"
         :search-placeholder="$t('TEAMS_SETTINGS.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-users"
         feature-name="team_management"
       >
         <template v-if="teamsList?.length" #count>

@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { messageStamp } from 'shared/helpers/timeHelper';
 import Button from 'dashboard/components-next/button/Button.vue';
+import Icon from 'dashboard/components-next/icon/Icon.vue';
 import ToggleSwitch from 'dashboard/components-next/switch/Switch.vue';
 import { BaseTableRow, BaseTableCell } from 'dashboard/components-next/table';
 
@@ -16,7 +17,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['toggle', 'edit', 'delete', 'clone']);
+const emit = defineEmits(['toggle', 'edit', 'delete', 'clone', 'run']);
 
 const readableDate = date => messageStamp(new Date(date), 'LLL d, yyyy');
 const readableDateWithTime = date =>
@@ -39,14 +40,28 @@ const automationActive = computed({
   <BaseTableRow :item="automation">
     <template #default>
       <BaseTableCell class="max-w-0 w-full">
-        <div class="flex items-center gap-2 min-w-0">
-          <span class="text-body-main text-n-slate-12 truncate">
-            {{ automation.name }}
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span
+            class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0"
+          >
+            <Icon icon="i-lucide-repeat" class="size-4" />
           </span>
-          <div class="w-px h-3 rounded-lg bg-n-weak flex-shrink-0" />
-          <span class="text-body-main text-n-slate-11 truncate">
-            {{ automation.description }}
-          </span>
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-body-main text-n-slate-12 truncate">
+              {{ automation.name }}
+            </span>
+            <div class="w-px h-3 rounded-lg bg-n-weak flex-shrink-0" />
+            <span class="text-body-main text-n-slate-11 truncate">
+              {{ automation.description }}
+            </span>
+            <span
+              v-if="automation.running"
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-n-alpha-2 text-n-slate-11 text-xs flex-shrink-0"
+            >
+              <Icon icon="i-lucide-loader-circle" class="size-3 animate-spin" />
+              {{ $t('AUTOMATION.RUN.RUNNING_LABEL') }}
+            </span>
+          </div>
         </div>
       </BaseTableCell>
 
@@ -77,6 +92,15 @@ const automationActive = computed({
             slate
             :is-loading="loading"
             @click="$emit('clone', automation)"
+          />
+          <Button
+            v-tooltip.top="$t('AUTOMATION.RUN.TOOLTIP')"
+            icon="i-lucide-play"
+            sm
+            slate
+            :is-loading="loading"
+            :disabled="automation.running"
+            @click="$emit('run', automation)"
           />
           <Button
             v-tooltip.top="$t('AUTOMATION.FORM.DELETE')"

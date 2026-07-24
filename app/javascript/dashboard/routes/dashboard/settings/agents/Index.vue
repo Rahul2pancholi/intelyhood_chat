@@ -150,6 +150,7 @@ const confirmDeletion = () => {
     :loading-message="$t('AGENT_MGMT.LOADING')"
     :no-records-found="!agentList.length"
     :no-records-message="$t('AGENT_MGMT.LIST.404')"
+    empty-state-icon="i-lucide-square-user"
   >
     <template #header>
       <BaseSettingsHeader
@@ -158,6 +159,7 @@ const confirmDeletion = () => {
         :description="$t('AGENT_MGMT.DESCRIPTION')"
         :link-text="$t('AGENT_MGMT.LEARN_MORE')"
         :search-placeholder="$t('AGENT_MGMT.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-square-user"
         feature-name="agents"
       >
         <template v-if="agentList?.length" #count>

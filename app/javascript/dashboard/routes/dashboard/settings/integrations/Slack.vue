@@ -82,6 +82,7 @@ onMounted(() => {
       <BaseSettingsHeader
         :title="$t('INTEGRATION_SETTINGS.SLACK.HEADER')"
         description=""
+        icon="i-lucide-blocks"
         feature-name="slack_integration"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       />

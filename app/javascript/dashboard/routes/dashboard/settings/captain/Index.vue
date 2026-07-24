@@ -123,6 +123,7 @@ onMounted(() => {
   <SettingsLayout
     :is-loading="isLoading"
     :no-records-message="t('CAPTAIN_SETTINGS.NOT_ENABLED')"
+    empty-state-icon="i-woot-captain"
     :loading-message="t('CAPTAIN_SETTINGS.LOADING')"
   >
     <template #header>
@@ -130,7 +131,7 @@ onMounted(() => {
         :title="t('CAPTAIN_SETTINGS.TITLE')"
         :description="t('CAPTAIN_SETTINGS.DESCRIPTION')"
         :link-text="t('CAPTAIN_SETTINGS.LINK_TEXT')"
-        icon-name="captain"
+        icon="i-woot-captain"
         feature-name="captain_billing"
       />
     </template>

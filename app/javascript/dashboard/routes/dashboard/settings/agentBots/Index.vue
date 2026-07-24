@@ -97,6 +97,7 @@ onMounted(() => {
     :loading-message="t('AGENT_BOTS.LIST.LOADING')"
     :no-records-found="!agentBots.length"
     :no-records-message="t('AGENT_BOTS.LIST.404')"
+    empty-state-icon="i-lucide-bot"
   >
     <template #header>
       <BaseSettingsHeader
@@ -105,6 +106,7 @@ onMounted(() => {
         :description="t('AGENT_BOTS.DESCRIPTION')"
         :link-text="t('AGENT_BOTS.LEARN_MORE')"
         :search-placeholder="t('AGENT_BOTS.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-bot"
         feature-name="agent_bots"
       >
         <template v-if="agentBots?.length" #count>

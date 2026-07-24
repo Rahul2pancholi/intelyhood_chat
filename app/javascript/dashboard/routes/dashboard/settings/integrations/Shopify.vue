@@ -96,6 +96,7 @@ onMounted(() => {
       <BaseSettingsHeader
         :title="$t('INTEGRATION_SETTINGS.SHOPIFY.HEADER')"
         description=""
+        icon="i-lucide-blocks"
         feature-name="shopify_integration"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       />

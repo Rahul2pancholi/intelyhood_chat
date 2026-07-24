@@ -150,6 +150,7 @@ export default {
         :search-placeholder="
           isBehindAPaywall ? '' : $t('SLA.SEARCH_PLACEHOLDER')
         "
+        icon="i-lucide-clock-alert"
         feature-name="sla"
       >
         <template v-if="!isBehindAPaywall && records?.length" #count>
@@ -225,13 +226,20 @@ export default {
           <BaseTableRow v-for="sla in items" :key="sla.id" :item="sla">
             <template #default>
               <BaseTableCell>
-                <div class="flex flex-col gap-1 min-w-0">
-                  <span class="text-body-main text-n-slate-12 truncate">
-                    {{ sla.name }}
+                <div class="flex items-start gap-2.5 min-w-0">
+                  <span
+                    class="inline-flex items-center justify-center size-8 rounded-lg bg-n-alpha-2 text-n-slate-11 flex-shrink-0"
+                  >
+                    <Icon icon="i-lucide-clock-alert" class="size-4" />
                   </span>
-                  <span class="text-body-main text-n-slate-11 line-clamp-1">
-                    {{ sla.description }}
-                  </span>
+                  <div class="flex flex-col gap-1 min-w-0">
+                    <span class="text-body-main text-n-slate-12 truncate">
+                      {{ sla.name }}
+                    </span>
+                    <span class="text-body-main text-n-slate-11 line-clamp-1">
+                      {{ sla.description }}
+                    </span>
+                  </div>
                 </div>
               </BaseTableCell>
 

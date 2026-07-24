@@ -2,7 +2,7 @@ class Api::V1::Accounts::AutomationRulesController < Api::V1::Accounts::BaseCont
   include AttachmentConcern
 
   before_action :check_authorization
-  before_action :fetch_automation_rule, only: [:show, :update, :destroy, :clone]
+  before_action :fetch_automation_rule, only: [:show, :update, :destroy, :clone, :run]
 
   def index
     @automation_rules = Current.account.automation_rules
@@ -50,6 +50,12 @@ class Api::V1::Accounts::AutomationRulesController < Api::V1::Accounts::BaseCont
     new_rule = automation_rule.dup
     new_rule.save!
     @automation_rule = new_rule
+  end
+
+  def run
+    @automation_rule.mark_running!
+    AutomationRuleExecutionJob.perform_later(@automation_rule, Current.user)
+    head :ok
   end
 
   private

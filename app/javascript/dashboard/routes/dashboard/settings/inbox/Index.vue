@@ -88,6 +88,7 @@ const openDelete = inbox => {
   <SettingsLayout
     :no-records-found="!inboxesList.length"
     :no-records-message="$t('INBOX_MGMT.LIST.404')"
+    empty-state-icon="i-lucide-inbox"
     :is-loading="uiFlags.isFetching"
   >
     <template #header>
@@ -97,6 +98,7 @@ const openDelete = inbox => {
         :description="$t('INBOX_MGMT.DESCRIPTION')"
         :link-text="$t('INBOX_MGMT.LEARN_MORE')"
         :search-placeholder="$t('INBOX_MGMT.SEARCH_PLACEHOLDER')"
+        icon="i-lucide-inbox"
         feature-name="inboxes"
       >
         <template v-if="inboxesList?.length" #count>
@@ -140,7 +142,7 @@ const openDelete = inbox => {
               v-else
               class="size-10 justify-center bg-n-alpha-3 rounded-xl ring ring-n-solid-1 border border-n-strong shadow-sm grid place-items-center"
             >
-              <ChannelIcon class="size-6 text-n-slate-10" :inbox="inbox" />
+              <ChannelIcon class="size-6" :inbox="inbox" />
             </div>
             <div class="flex flex-col items-start gap-1">
               <span class="block text-heading-3 text-n-slate-12 capitalize">

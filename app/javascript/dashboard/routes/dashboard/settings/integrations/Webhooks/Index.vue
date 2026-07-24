@@ -108,6 +108,7 @@ export default {
     :is-loading="uiFlags.fetchingList"
     :loading-message="$t('INTEGRATION_SETTINGS.WEBHOOK.LOADING')"
     :no-records-message="$t('INTEGRATION_SETTINGS.WEBHOOK.LIST.404')"
+    empty-state-icon="i-lucide-webhook"
     :no-records-found="!records.length"
   >
     <template #header>
@@ -120,6 +121,7 @@ export default {
         :search-placeholder="
           $t('INTEGRATION_SETTINGS.WEBHOOK.SEARCH_PLACEHOLDER')
         "
+        icon="i-lucide-webhook"
         feature-name="webhook"
         :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       >

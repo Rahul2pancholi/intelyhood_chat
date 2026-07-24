@@ -208,7 +208,11 @@ export default {
 
 <template>
   <div class="grid max-w-2xl ltr:mr-auto rtl:ml-auto">
-    <BaseSettingsHeader :title="$t('PROFILE_SETTINGS.TITLE')" description="" />
+    <BaseSettingsHeader
+      :title="$t('PROFILE_SETTINGS.TITLE')"
+      description=""
+      icon="i-lucide-user"
+    />
     <SectionLayout title="" description="" class="!pt-0">
       <div class="flex flex-col gap-6">
         <UserProfilePicture

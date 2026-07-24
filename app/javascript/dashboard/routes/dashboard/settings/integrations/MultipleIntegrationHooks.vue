@@ -81,6 +81,7 @@ const inboxName = hook => (hook.inbox ? hook.inbox.name : '');
           { installationName: globalConfig.installationName }
         )
       "
+      icon="i-lucide-blocks"
       :feature-name="integrationId"
       :back-button-label="$t('INTEGRATION_SETTINGS.HEADER')"
       :search-placeholder="$t('INTEGRATION_APPS.SEARCH_PLACEHOLDER')"

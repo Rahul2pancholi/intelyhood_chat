@@ -136,6 +136,7 @@ const regenerateBackupCodes = async ({ otpCode }) => {
       :title="$t('MFA_SETTINGS.TITLE')"
       :description="$t('MFA_SETTINGS.SUBTITLE')"
       :back-button-label="$t('PROFILE_SETTINGS.TITLE')"
+      icon="i-lucide-shield-check"
     />
 
     <div class="grid gap-4 w-full mt-4">
