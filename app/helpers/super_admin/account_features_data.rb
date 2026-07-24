@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ModuleLength
 module SuperAdmin::AccountFeaturesData
   # Channel features are split for easy filtering in Super Admin UI.
   CHANNEL_GROUPS = {
@@ -137,3 +138,4 @@ module SuperAdmin::AccountFeaturesData
     'sla' => 'icon-hourglass-line'
   }.freeze
 end
+# rubocop:enable Metrics/ModuleLength
