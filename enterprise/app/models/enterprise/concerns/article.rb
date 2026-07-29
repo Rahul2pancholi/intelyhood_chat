@@ -67,23 +67,35 @@ module Enterprise::Concerns::Article
       { role: 'system', content: article_to_search_terms_prompt },
       { role: 'user', content: "title: #{title} \n description: #{description} \n content: #{content}" }
     ]
-    headers = { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{openai_api_key}" }
-    body = { model: 'gpt-4o', messages: messages, response_format: { type: 'json_object' } }.to_json
+    headers = { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{captain_llm_api_key}" }
+    body = { model: captain_llm_model, messages: messages, response_format: { type: 'json_object' } }.to_json
     Rails.logger.info "Requesting Chat GPT with body: #{body}"
-    response = HTTParty.post(openai_api_url, headers: headers, body: body)
+    response = HTTParty.post(captain_llm_api_url, headers: headers, body: body)
     Rails.logger.info "Chat GPT response: #{response.body}"
     JSON.parse(response.parsed_response['choices'][0]['message']['content'])['search_terms']
   end
 
   private
 
-  def openai_api_key
-    InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_API_KEY')&.value.presence || raise(I18n.t('captain.api_key_missing'))
+  def captain_llm_provider
+    InstallationConfig.find_by(name: 'CAPTAIN_LLM_PROVIDER')&.value.presence || 'openai'
   end
 
-  def openai_api_url
-    endpoint = InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_ENDPOINT')&.value.presence || 'https://api.openai.com/'
-    endpoint = endpoint.chomp('/')
-    "#{endpoint}/v1/chat/completions"
+  def captain_llm_api_key
+    key_name = captain_llm_provider == 'gemini' ? 'CAPTAIN_GEMINI_API_KEY' : 'CAPTAIN_OPEN_AI_API_KEY'
+    InstallationConfig.find_by(name: key_name)&.value.presence || raise(I18n.t('captain.api_key_missing'))
+  end
+
+  def captain_llm_model
+    captain_llm_provider == 'gemini' ? LlmConstants::DEFAULT_GEMINI_MODEL : 'gpt-4o'
+  end
+
+  def captain_llm_api_url
+    if captain_llm_provider == 'gemini'
+      "#{LlmConstants::GEMINI_OPENAI_COMPAT_ENDPOINT}/chat/completions"
+    else
+      endpoint = InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_ENDPOINT')&.value.presence || 'https://api.openai.com/'
+      "#{endpoint.chomp('/')}/v1/chat/completions"
+    end
   end
 end

@@ -3,6 +3,7 @@
 require 'agents'
 
 Rails.application.config.after_initialize do
+  provider = InstallationConfig.find_by(name: 'CAPTAIN_LLM_PROVIDER')&.value.presence || 'openai'
   api_key = InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_API_KEY')&.value
   model = InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_MODEL')&.value.presence || LlmConstants::DEFAULT_MODEL
   api_endpoint = InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_ENDPOINT')&.value || LlmConstants::OPENAI_API_ENDPOINT
@@ -18,7 +19,7 @@ Rails.application.config.after_initialize do
         end
       end
       config.gemini_api_key = gemini_api_key if gemini_api_key.present?
-      config.default_model = model
+      config.default_model = provider == 'gemini' && gemini_api_key.present? ? LlmConstants::DEFAULT_GEMINI_MODEL : model
       config.debug = false
     end
   end

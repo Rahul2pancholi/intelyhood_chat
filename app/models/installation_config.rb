@@ -16,6 +16,7 @@
 #
 class InstallationConfig < ApplicationRecord
   CAPTAIN_LLM_CONFIG_KEYS = %w[
+    CAPTAIN_LLM_PROVIDER
     CAPTAIN_OPEN_AI_API_KEY
     CAPTAIN_OPEN_AI_ENDPOINT
     CAPTAIN_OPEN_AI_MODEL

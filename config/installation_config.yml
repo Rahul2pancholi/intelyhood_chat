@@ -182,6 +182,14 @@
 # End of Microsoft Email Channel Config
 
 # MARK: Captain Config
+- name: CAPTAIN_LLM_PROVIDER
+  display_title: 'Captain LLM Provider'
+  description: 'Which LLM provider Captain AI should use: openai or gemini.'
+  locked: false
+  type: select
+  options:
+    openai: OpenAI
+    gemini: Gemini
 - name: CAPTAIN_OPEN_AI_API_KEY
   display_title: 'OpenAI API Key'
   description: 'The API key used to authenticate requests to OpenAI services for Captain AI.'
