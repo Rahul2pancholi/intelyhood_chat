@@ -77,18 +77,20 @@ services:
     cpus: 0.5
     mem_limit: 256m
 
-  # Optional lightweight Postgres browser UI. Bound to localhost only — reach it
-  # via an SSH tunnel (ssh -L 8081:127.0.0.1:8081 <host>), then open
-  # http://localhost:8081. Start with:
+  # Optional lightweight Postgres browser UI, exposed publicly on port 8081 and
+  # protected by pgweb's built-in basic auth (set PGWEB_AUTH_USER/PGWEB_AUTH_PASS
+  # in .env — required, do not run this without them). Start with:
   #   docker compose -f docker-compose.production.yaml --profile with-pgweb up -d pgweb
   pgweb:
     image: sosedoff/pgweb
     restart: always
     profiles: ['with-pgweb']
     ports:
-      - '127.0.0.1:8081:8081'
+      - '8081:8081'
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USERNAME:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DATABASE:-intelychat}?sslmode=disable
+      - PGWEB_AUTH_USER=${PGWEB_AUTH_USER:?set PGWEB_AUTH_USER in .env}
+      - PGWEB_AUTH_PASS=${PGWEB_AUTH_PASS:?set PGWEB_AUTH_PASS in .env}
     depends_on:
       - postgres
     cpus: 0.25
