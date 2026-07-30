@@ -13,6 +13,16 @@
 #  conversation_id    :bigint           not null
 #  faq_suggestion_id  :bigint
 #
+# Indexes
+#
+#  index_captain_faq_observations_on_account_id         (account_id)
+#  index_captain_faq_observations_on_conversation_id    (conversation_id)
+#  index_captain_faq_observations_on_faq_suggestion_id  (faq_suggestion_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (faq_suggestion_id => captain_faq_suggestions.id)
+#
 class Captain::FaqObservation < ApplicationRecord
   self.table_name = 'captain_faq_observations'
 
