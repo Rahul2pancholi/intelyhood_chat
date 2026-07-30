@@ -1,8 +1,9 @@
 module Enterprise::Internal::CheckNewVersionsJob
   def perform
+    # Disabled alongside the base job: skips syncing the installation plan from
+    # the external hosted hub and skips reconciling/disabling premium features
+    # based on it. Re-enable once our own hub/licensing service is in place.
     super
-    update_plan_info
-    reconcile_premium_config_and_features
   end
 
   private

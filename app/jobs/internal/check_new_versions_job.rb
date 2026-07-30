@@ -2,10 +2,11 @@ class Internal::CheckNewVersionsJob < ApplicationJob
   queue_as :scheduled_jobs
 
   def perform
-    return unless Rails.env.production?
-
-    @instance_info = IntelychatHub.sync_with_hub
-    update_version_info
+    # Disabled: this used to phone home to an external hosted hub for version/plan
+    # sync, which has no relationship to this installation's own billing and was
+    # resetting the installation plan (and disabling paid features) to "community"
+    # every run. Re-enable once our own hub/licensing service is in place.
+    nil
   end
 
   private
