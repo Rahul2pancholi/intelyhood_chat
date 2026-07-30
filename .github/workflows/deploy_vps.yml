@@ -20,11 +20,39 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          start_epoch=$(date +%s)
+          echo "DEPLOY_START_EPOCH=${start_epoch}" >> "$GITHUB_ENV"
+          start_time="$(TZ='Asia/Kolkata' date -d "@${start_epoch}" '+%Y-%m-%d %H:%M:%S IST')"
+          echo "DEPLOY_START_TIME=${start_time}" >> "$GITHUB_ENV"
+
           if [ -z "$TELEGRAM_BOT_TOKEN" ]; then exit 0; fi
+
+          short_sha="${SHA:0:7}"
+          subject="$(printf '%s' "$COMMIT_MSG" | head -n1)"
+          [ -z "$subject" ] && subject="(manual trigger, no commit message)"
+
+          case "$subject" in
+            "Merge pull request "*) kind="🔀 PR merge" ;;
+            *"(#"*")") kind="🔀 PR merge (squash)" ;;
+            *) kind="⬆️ Direct push" ;;
+          esac
+
+          text=$(printf '🚀 <b>Deploy started</b>\n📦 Repo: <code>%s</code>\n🌿 Branch: <code>%s</code>\n👤 By: <b>%s</b>\n%s\n💬 <code>%s</code> %s\n🕒 Started: %s\n🔗 <a href="%s">Commit</a> · <a href="%s">Run</a>' \
+            "$REPO" "$BRANCH" "$ACTOR" "$kind" "$short_sha" "$subject" "$start_time" "$COMMIT_URL" "$RUN_URL")
+
           curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="🚀 Deploy started for ${{ github.repository }} (${{ github.sha }})" > /dev/null || true
+            -d parse_mode="HTML" \
+            -d disable_web_page_preview="true" \
+            --data-urlencode "text=${text}" > /dev/null || true
 
       - name: Require deploy secrets
         env:
@@ -86,13 +114,37 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           JOB_STATUS: ${{ job.status }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ]; then exit 0; fi
+
+          end_epoch=$(date +%s)
+          end_time="$(TZ='Asia/Kolkata' date -d "@${end_epoch}" '+%Y-%m-%d %H:%M:%S IST')"
+          start_epoch="${DEPLOY_START_EPOCH:-$end_epoch}"
+          duration_sec=$((end_epoch - start_epoch))
+          duration="$((duration_sec / 60))m $((duration_sec % 60))s"
+
+          short_sha="${SHA:0:7}"
+          subject="$(printf '%s' "$COMMIT_MSG" | head -n1)"
+          [ -z "$subject" ] && subject="(manual trigger, no commit message)"
+
           if [ "$JOB_STATUS" = "success" ]; then
-            text="✅ Deploy succeeded for ${{ github.repository }} (${{ github.sha }})"
+            icon="✅"; label="Deploy succeeded"
           else
-            text="❌ Deploy failed for ${{ github.repository }} (${{ github.sha }}) — ${JOB_STATUS}. See: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            icon="❌"; label="Deploy failed (${JOB_STATUS})"
           fi
+
+          text=$(printf '%s <b>%s</b>\n📦 Repo: <code>%s</code>\n🌿 Branch: <code>%s</code>\n👤 By: <b>%s</b>\n💬 <code>%s</code> %s\n🕒 Started: %s\n🕒 Finished: %s\n⏱️ Duration: %s\n🔗 <a href="%s">Commit</a> · <a href="%s">Run</a>' \
+            "$icon" "$label" "$REPO" "$BRANCH" "$ACTOR" "$short_sha" "$subject" "${DEPLOY_START_TIME:-unknown}" "$end_time" "$duration" "$COMMIT_URL" "$RUN_URL")
+
           curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="$text" > /dev/null || true
+            -d parse_mode="HTML" \
+            -d disable_web_page_preview="true" \
+            --data-urlencode "text=${text}" > /dev/null || true
