@@ -16,6 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
+      - name: Notify Telegram - deploy started
+        if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}
+        run: |
+          curl -sS -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="🚀 Deploy started for ${{ github.repository }} (${{ github.sha }})" > /dev/null
+
       - name: Require deploy secrets
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -69,3 +76,15 @@ jobs:
           done
           echo "::error::App did not become healthy after deploy"
           exit 1
+
+      - name: Notify Telegram - deploy result
+        if: ${{ always() && secrets.TELEGRAM_BOT_TOKEN != '' }}
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            text="✅ Deploy succeeded for ${{ github.repository }} (${{ github.sha }})"
+          else
+            text="❌ Deploy failed for ${{ github.repository }} (${{ github.sha }}) — ${{ job.status }}. See: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
+          curl -sS -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="$text" > /dev/null
