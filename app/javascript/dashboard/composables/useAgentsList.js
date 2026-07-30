@@ -53,7 +53,11 @@ export function useAgentsList(
    * @type {import('vue').ComputedRef<Array>}
    */
   const agentsList = computed(() => {
-    const agents = assignableAgents.value || [];
+    const agents = (assignableAgents.value || []).map(agent =>
+      !agent.name && agent.assignee_type === 'AgentBot'
+        ? { ...agent, name: '-' }
+        : agent
+    );
     const agentsByUpdatedPresence = getAgentsByUpdatedPresence(
       agents,
       currentUser.value,
