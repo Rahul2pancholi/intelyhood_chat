@@ -2,7 +2,7 @@
 
 module LlmConstants
   DEFAULT_MODEL = 'gpt-4.1'
-  DEFAULT_GEMINI_MODEL = 'gemini-3-flash'
+  DEFAULT_GEMINI_MODEL = 'gemini-3-flash-preview'
   DEFAULT_EMBEDDING_MODEL = 'text-embedding-3-small'
   PDF_PROCESSING_MODEL = 'gpt-4.1-mini'
 

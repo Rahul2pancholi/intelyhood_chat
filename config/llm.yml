@@ -45,11 +45,11 @@ models:
     display_name: 'Claude Sonnet 4.5'
     coming_soon: true
     credit_multiplier: 3
-  gemini-3-flash:
+  gemini-3-flash-preview:
     provider: gemini
     display_name: 'Gemini 3 Flash'
     credit_multiplier: 1
-  gemini-3-pro:
+  gemini-3-pro-preview:
     provider: gemini
     display_name: 'Gemini 3 Pro'
     credit_multiplier: 3
@@ -77,8 +77,8 @@ features:
         gpt-5.1,
         gpt-5.2,
         claude-haiku-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
+        gemini-3-flash-preview,
+        gemini-3-pro-preview,
       ]
     default: gpt-4.1-mini
   assistant:
@@ -91,8 +91,8 @@ features:
         gpt-5.2,
         claude-haiku-4.5,
         claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
+        gemini-3-flash-preview,
+        gemini-3-pro-preview,
       ]
     default: gpt-4.1
   copilot:
@@ -105,13 +105,13 @@ features:
         gpt-5.2,
         claude-haiku-4.5,
         claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
+        gemini-3-flash-preview,
+        gemini-3-pro-preview,
       ]
     default: gpt-4.1
   label_suggestion:
     models:
-      [gpt-4.1-nano, gpt-4.1-mini, gpt-5-mini, gemini-3-flash, claude-haiku-4.5]
+      [gpt-4.1-nano, gpt-4.1-mini, gpt-5-mini, gemini-3-flash-preview, claude-haiku-4.5]
     default: gpt-4.1-mini
   document_faq_generation:
     models:
@@ -123,8 +123,8 @@ features:
         gpt-5.2,
         claude-haiku-4.5,
         claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
+        gemini-3-flash-preview,
+        gemini-3-pro-preview,
       ]
     default: gpt-4.1-mini
   conversation_faq_generation:
@@ -137,8 +137,8 @@ features:
         gpt-5.2,
         claude-haiku-4.5,
         claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
+        gemini-3-flash-preview,
+        gemini-3-pro-preview,
       ]
     default: gpt-5.2
   pdf_faq_generation:
@@ -154,8 +154,8 @@ features:
         gpt-5.2,
         claude-haiku-4.5,
         claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
+        gemini-3-flash-preview,
+        gemini-3-pro-preview,
       ]
     default: gpt-5.2
   onboarding_content_generation:

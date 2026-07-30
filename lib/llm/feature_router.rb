@@ -33,7 +33,11 @@ module Llm::FeatureRouter
       return unless feature_key == 'assistant'
       return unless account&.feature_enabled?('captain_integration_v2')
 
-      CAPTAIN_V2_ASSISTANT_MODEL
+      captain_llm_provider == 'gemini' ? LlmConstants::DEFAULT_GEMINI_MODEL : CAPTAIN_V2_ASSISTANT_MODEL
+    end
+
+    def captain_llm_provider
+      InstallationConfig.find_by(name: 'CAPTAIN_LLM_PROVIDER')&.value.presence || 'openai'
     end
   end
 end
