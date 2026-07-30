@@ -50,4 +50,18 @@ module CustomExceptions::Account
       :payment_required
     end
   end
+
+  class EmailLimitExceeded < CustomExceptions::Base
+    def message
+      'Daily email limit exceeded. Please try again tomorrow.'
+    end
+
+    def to_hash
+      { error: message }
+    end
+
+    def http_status
+      :too_many_requests
+    end
+  end
 end

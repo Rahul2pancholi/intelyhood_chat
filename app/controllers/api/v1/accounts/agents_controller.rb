@@ -47,6 +47,8 @@ class Api::V1::Accounts::AgentsController < Api::V1::Accounts::BaseController
         builder.perform
       rescue ActiveRecord::RecordInvalid => e
         Rails.logger.info "[Agent#bulk_create] ignoring email #{email}, errors: #{e.record.errors}"
+      rescue CustomExceptions::Account::EmailLimitExceeded => e
+        Rails.logger.warn "[Agent#bulk_create] skipping email #{email}, #{e.message}"
       end
     end
 
