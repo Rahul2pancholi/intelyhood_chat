@@ -151,6 +151,7 @@ en:
     slack:
       invalid_channel_id: 'Invalid slack channel. Please try again'
     whatsapp:
+      message_outside_messaging_window: 'Message could not be sent because the 24-hour customer service window has closed. Use a template message instead.'
       token_exchange_failed: 'Failed to exchange code for access token. Please try again.'
       invalid_token_permissions: 'The access token does not have the required permissions for WhatsApp.'
       phone_info_fetch_failed: 'Failed to fetch phone number information. Please try again.'
